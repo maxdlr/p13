@@ -1,6 +1,7 @@
 package com.maxdlr.p13.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,12 @@ public class UserMapperTests {
     UserEntity entity = TestUtils.makeUserEntity(1);
     UserRecordInfo info = this.userMapper.toRecordInfo(entity);
 
+    assertNotNull(entity);
+    assertNotNull(info);
+
+    assertNotNull(entity.getId());
+    assertNotNull(info.getId());
+
     assertEquals(entity.getId(), info.getId());
     assertEquals(entity.getFirstname(), info.getFirstname());
     assertEquals(entity.getLastname(), info.getLastname());
@@ -51,6 +58,13 @@ public class UserMapperTests {
     for (int i = 0; i < infoList.size() - 1; i++) {
       UserEntity entity = entities.get(i);
       UserRecordInfo info = infoList.get(i);
+
+      assertNotNull(entity);
+      assertNotNull(info);
+
+      assertNotNull(entity.getId());
+      assertNotNull(info.getId());
+
       assertEquals(entity.getId(), info.getId());
       assertEquals(entity.getFirstname(), info.getFirstname());
       assertEquals(entity.getLastname(), info.getLastname());

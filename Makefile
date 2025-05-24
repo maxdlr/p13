@@ -7,7 +7,7 @@
 #m for information during makefile remakes.
 MAKEFLAGS += --no-print-directory
 #MAKEFLAGS += --debug=v
-#MAKEFLAGS += -s
+MAKEFLAGS += -s
 include .env
 export $(shell sed 's/=.*//' .env)
 #default: help
@@ -19,6 +19,9 @@ pt: ## Run Posting with the project request collection
 
 back-run: ## Run the backend app
 	cd back && mvn clean spring-boot:run -DskipTests
+
+back-tests: ## Run the backend tests
+	cd back && mvn clean test
 
 front-run: ## run the frontend app
 	export SERVER_ADDRESS="${address}"
