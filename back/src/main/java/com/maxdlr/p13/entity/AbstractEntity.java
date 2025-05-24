@@ -26,5 +26,4 @@ public class AbstractEntity {
   AbstractEntity() {
     this.createdOn = new Date();
   }
-
 }

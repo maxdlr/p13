@@ -1,13 +1,13 @@
+
 package com.maxdlr.p13.entity;
 
 import org.springframework.data.annotation.Id;
 
-import com.maxdlr.p13.enums.WsMessageStatusEnum;
+import com.maxdlr.p13.enums.WsConversationStatusEnum;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,20 +18,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @EqualsAndHashCode
-public class WsMessageEntity extends AbstractEntity {
+public class WsConversationEntity {
   @Id
   @GeneratedValue
   private Integer id;
 
   @Column(nullable = false)
-  private String content;
-
-  @ManyToOne
-  private UserEntity user;
-
-  @ManyToOne
-  private WsConversationEntity wsConversation;
+  private String wsTopicId;
 
   @Column(nullable = false)
-  private WsMessageStatusEnum status;
+  private UserEntity user;
+
+  @Column(nullable = false)
+  private WsConversationStatusEnum status;
 }
