@@ -2,28 +2,17 @@ package com.maxdlr.p13.entity;
 
 import java.util.Date;
 
-import jakarta.persistence.Column;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-/**
- * AbstractEntity
- */
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@EqualsAndHashCode
+import jakarta.persistence.MappedSuperclass;
+
+@MappedSuperclass
 public class AbstractEntity {
 
-  @Column(nullable = false)
+  @CreationTimestamp
   Date createdOn;
 
-  @Column(nullable = true)
+  @UpdateTimestamp
   Date updatedOn;
-
-  AbstractEntity() {
-    this.createdOn = new Date();
-  }
 }

@@ -1,12 +1,12 @@
 package com.maxdlr.p13.entity;
 
-import org.springframework.data.annotation.Id;
-
 import com.maxdlr.p13.enums.WsMessageStatusEnum;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,7 +26,7 @@ public class WsMessageEntity extends AbstractEntity {
   @Column(nullable = false)
   private String content;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   private UserEntity user;
 
   @ManyToOne

@@ -1,0 +1,62 @@
+package com.maxdlr.p13.mapper;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import com.maxdlr.p13.TestUtils;
+import com.maxdlr.p13.dto.UserRecordInfo;
+import com.maxdlr.p13.entity.RoleEntity;
+import com.maxdlr.p13.entity.UserEntity;
+import com.maxdlr.p13.enums.RoleEnum;
+
+import graphql.AssertException;
+
+public class UserMapperTests {
+
+  UserMapper userMapper;
+
+  @BeforeEach
+  public void setUp() {
+    userMapper = new UserMapperImpl();
+  }
+
+  @Test
+  public void testToRecordInfo() {
+    UserEntity entity = TestUtils.makeUserEntity(1);
+    UserRecordInfo info = this.userMapper.toRecordInfo(entity);
+
+    assertEquals(entity.getId(), info.getId());
+    assertEquals(entity.getFirstname(), info.getFirstname());
+    assertEquals(entity.getLastname(), info.getLastname());
+    assertEquals(entity.getPhoneNumber(), info.getPhoneNumber());
+    assertEquals(entity.getIsActive(), info.getIsActive());
+    assertEquals(entity.getEmail(), info.getEmail());
+  }
+
+  @Test
+  public void testToRecordInfoList() {
+    List<UserEntity> entities = new ArrayList<>();
+    for (int i = 0; i < 10; i++) {
+      UserEntity entity = TestUtils.makeUserEntity(i);
+      entities.add(entity);
+    }
+
+    List<UserRecordInfo> infoList = this.userMapper.toRecordInfo(entities);
+
+    for (int i = 0; i < infoList.size() - 1; i++) {
+      UserEntity entity = entities.get(i);
+      UserRecordInfo info = infoList.get(i);
+      assertEquals(entity.getId(), info.getId());
+      assertEquals(entity.getFirstname(), info.getFirstname());
+      assertEquals(entity.getLastname(), info.getLastname());
+      assertEquals(entity.getPhoneNumber(), info.getPhoneNumber());
+      assertEquals(entity.getIsActive(), info.getIsActive());
+      assertEquals(entity.getEmail(), info.getEmail());
+    }
+  }
+}
