@@ -73,9 +73,7 @@ type WsMessageInfo {
 }
 
 input WsMessageInput {
-  id: ID
   content: String
   userId: ID
   conversationId: ID
-  status: String
 }

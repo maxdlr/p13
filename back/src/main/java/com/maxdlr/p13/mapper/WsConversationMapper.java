@@ -18,7 +18,7 @@ public abstract class WsConversationMapper
   public UserRepository userRepository;
 
   @Mappings({
-      @Mapping(target = "user", expression = "java(this.userRepository.findOneById(input.getUserId()))")
+      @Mapping(target = "user", expression = "java(this.userRepository.findOneById(input.getUserId()).get())")
   })
   public abstract WsConversationEntity toEntityFromInput(WsConversationRecordInput input);
 }

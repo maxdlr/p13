@@ -1,15 +1,9 @@
 package com.maxdlr.p13.dto;
 
 public record WsMessageRecordInput(
-    Integer id,
     String content,
     Integer userId,
-    Integer conversationId,
-    String status) {
-
-  public Integer getId() {
-    return id;
-  }
+    Integer conversationId) {
 
   public String getContent() {
     return content;
@@ -19,11 +13,7 @@ public record WsMessageRecordInput(
     return userId;
   }
 
-  public Integer getConversation() {
+  public Integer getConversationId() {
     return conversationId;
-  }
-
-  public String getStatus() {
-    return status;
   }
 }
