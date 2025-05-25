@@ -26,7 +26,7 @@ public class WsConversationMapperTests {
   @Test
   public void toEntityFromRecordInfo() {
     WsConversationRecordInfo info = TestUtils.makeWsConversationInfo(1, 1,
-        WsConversationStatusEnum.USER_ACTIVE.toString());
+        WsConversationStatusEnum.USER_ACTIVE);
 
     WsConversationEntity entity = this.wsConversationMapper.toEntityFromInfo(info);
 
@@ -44,7 +44,7 @@ public class WsConversationMapperTests {
     List<WsConversationRecordInfo> infoList = new ArrayList<>();
 
     for (int i = 0; i < 10; i++) {
-      infoList.add(TestUtils.makeWsConversationInfo(i, 1, WsConversationStatusEnum.USER_ACTIVE.toString()));
+      infoList.add(TestUtils.makeWsConversationInfo(i, 1, WsConversationStatusEnum.USER_ACTIVE));
     }
 
     List<WsConversationEntity> entityList = this.wsConversationMapper.toEntityFromInfo(infoList);

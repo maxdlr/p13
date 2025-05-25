@@ -4,7 +4,7 @@ public record WsMessageRecordInfo(
     Integer id,
     String content,
     UserRecordInfo user,
-    WsConversationRecordInfo conversation,
+    WsConversationRecordInfo wsConversation,
     String status) {
 
   public Integer getId() {
@@ -19,8 +19,8 @@ public record WsMessageRecordInfo(
     return user;
   }
 
-  public WsConversationRecordInfo getConversation() {
-    return conversation;
+  public WsConversationRecordInfo getWsConversation() {
+    return wsConversation;
   }
 
   public String getStatus() {

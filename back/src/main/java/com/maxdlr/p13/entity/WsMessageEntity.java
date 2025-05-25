@@ -8,16 +8,20 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
-@Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
 @EqualsAndHashCode
+@Data
+@Table(name = "ws_message")
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Accessors(chain = true)
 public class WsMessageEntity extends AbstractEntity {
   @Id
   @GeneratedValue
