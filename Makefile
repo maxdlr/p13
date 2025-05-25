@@ -21,7 +21,10 @@ back-run: ## Run the backend app
 	cd back && mvn clean spring-boot:run -DskipTests
 
 back-tests: ## Run the backend tests
-	cd back && mvn clean test
+	cd back && mvn clean test && open target/site/jacoco/index.html
+
+back-open-tests-coverage: ## Open Jacoco tests coverage results
+	cd back && open back/target/site/jacoco/index.html
 
 front-run: ## run the frontend app
 	export SERVER_ADDRESS="${address}"
