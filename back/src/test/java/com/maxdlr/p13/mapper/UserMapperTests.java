@@ -73,4 +73,52 @@ public class UserMapperTests {
       assertEquals(entity.getEmail(), info.getEmail());
     }
   }
+
+  @Test
+  public void testToEntityFromInfo() {
+    UserRecordInfo info = TestUtils.makeUserInfo(1);
+    UserEntity entity = this.userMapper.toEntityFromInfo(info);
+
+    assertNotNull(entity);
+    assertNotNull(info);
+
+    assertNotNull(entity.getId());
+    assertNotNull(info.getId());
+
+    assertEquals(entity.getId(), info.getId());
+    assertEquals(entity.getFirstname(), info.getFirstname());
+    assertEquals(entity.getLastname(), info.getLastname());
+    assertEquals(entity.getPhoneNumber(), info.getPhoneNumber());
+    assertEquals(entity.getIsActive(), info.getIsActive());
+    assertEquals(entity.getEmail(), info.getEmail());
+  }
+
+  @Test
+  public void testToEntityFromInfoList() {
+    List<UserRecordInfo> infoList = new ArrayList<>();
+    for (int i = 0; i < 10; i++) {
+      UserRecordInfo info = TestUtils.makeUserInfo(i);
+      infoList.add(info);
+    }
+
+    List<UserEntity> entityList = this.userMapper.toEntityFromInfo(infoList);
+
+    for (int i = 0; i < infoList.size() - 1; i++) {
+      UserEntity entity = entityList.get(i);
+      UserRecordInfo info = infoList.get(i);
+
+      assertNotNull(entity);
+      assertNotNull(info);
+
+      assertNotNull(entity.getId());
+      assertNotNull(info.getId());
+
+      assertEquals(entity.getId(), info.getId());
+      assertEquals(entity.getFirstname(), info.getFirstname());
+      assertEquals(entity.getLastname(), info.getLastname());
+      assertEquals(entity.getPhoneNumber(), info.getPhoneNumber());
+      assertEquals(entity.getIsActive(), info.getIsActive());
+      assertEquals(entity.getEmail(), info.getEmail());
+    }
+  }
 }

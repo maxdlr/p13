@@ -1,0 +1,81 @@
+type Query {
+  GetUser(id: ID): UserInfo
+  GetAllUsers: [UserInfo]!
+  GetAllUsersOfConversation(conversationId: ID): [UserInfo]!
+
+  GetRoleOfUser(userId: ID): RoleInfo
+
+  GetMessage(id: ID): WsMessageInfo
+  GetAllMessagesOfConversation(conversationId: ID): [WsMessageInfo]!
+  GetAllMessagesOfUser(userId: ID): [WsMessageInfo]!
+
+  GetAllConversationsOfUser(userId: ID): [WsConversationInfo]!
+  GetConversation(id: ID): WsConversationInfo
+}
+
+type Mutation {
+  CreateUser(user: UserInput): UserInfo
+
+  CreateConversation(conversation: WsConversationInput): WsConversationInfo
+
+  CreateMessage(message: WsMessageInput): WsMessageInfo
+}
+
+type UserInfo {
+  id: ID
+  email: String
+  firstname: String
+  lastname: String
+  phoneNumber: String
+  isActive: Boolean
+  roles: [RoleInfo]
+}
+
+input UserInput {
+  id: ID
+  email: String
+  firstname: String
+  lastname: String
+  phoneNumber: String
+  isActive: Boolean
+  roleIds: [ID]
+}
+
+# -------------------------------------------------
+
+type RoleInfo {
+  id: ID
+  name: String
+}
+
+# -------------------------------------------------
+
+type WsConversationInfo {
+  id: ID
+  wsTopic: String
+  user: UserInfo
+  status: String
+}
+
+input WsConversationInput {
+  id: ID
+  userId: ID
+}
+
+# -------------------------------------------------
+
+type WsMessageInfo {
+  id: ID
+  content: String
+  user: UserInfo
+  conversation: WsConversationInfo
+  status: String
+}
+
+input WsMessageInput {
+  id: ID
+  content: String
+  userId: ID
+  conversationId: ID
+  status: String
+}

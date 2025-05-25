@@ -1,7 +1,5 @@
 package com.maxdlr.p13.dto;
 
-import java.util.List;
-
 public record UserRecordInfo(
     Integer id,
     String email,
@@ -9,7 +7,7 @@ public record UserRecordInfo(
     String lastname,
     String phoneNumber,
     Boolean isActive,
-    List<RoleRecordInfo> roles) {
+    RoleRecordInfo role) {
 
   public Integer getId() {
     return id;
@@ -35,7 +33,7 @@ public record UserRecordInfo(
     return isActive;
   }
 
-  public List<RoleRecordInfo> getRoles() {
-    return roles;
+  public RoleRecordInfo getRoles() {
+    return role;
   }
 }

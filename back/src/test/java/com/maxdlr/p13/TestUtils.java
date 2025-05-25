@@ -3,6 +3,8 @@ package com.maxdlr.p13;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.maxdlr.p13.dto.RoleRecordInfo;
+import com.maxdlr.p13.dto.UserRecordInfo;
 import com.maxdlr.p13.entity.RoleEntity;
 import com.maxdlr.p13.entity.UserEntity;
 import com.maxdlr.p13.enums.RoleEnum;
@@ -10,9 +12,7 @@ import com.maxdlr.p13.enums.RoleEnum;
 public class TestUtils {
 
   public static UserEntity makeUserEntity(Integer id) {
-    List<RoleEntity> roles = new ArrayList<>();
-    RoleEntity userRole = new RoleEntity().setName(RoleEnum.USER);
-    roles.add(userRole);
+    RoleEntity userRole = makeRoleEntityAsUser(1);
     return new UserEntity()
         .setId(id)
         .setEmail("max@max.com" + id)
@@ -21,6 +21,34 @@ public class TestUtils {
         .setLastname("dlr" + id)
         .setPhoneNumber("0123456789")
         .setIsActive(true)
-        .setRoles(roles);
+        .setRole(userRole);
+  }
+
+  public static UserRecordInfo makeUserInfo(Integer id) {
+    RoleRecordInfo userRoleInfo = makeRoleInfoAsUser(id);
+    return new UserRecordInfo(
+        id,
+        "max@max.com" + id,
+        "max" + id,
+        "dlr" + id,
+        "0123456789",
+        true,
+        userRoleInfo);
+  }
+
+  public static RoleEntity makeRoleEntityAsUser(Integer id) {
+    return new RoleEntity().setId(id).setName(RoleEnum.USER);
+  }
+
+  public static RoleEntity makeRoleEntityAsAdmin(Integer id) {
+    return new RoleEntity().setId(id).setName(RoleEnum.ADMIN);
+  }
+
+  public static RoleRecordInfo makeRoleInfoAsUser(Integer id) {
+    return new RoleRecordInfo(id, RoleEnum.USER.toString());
+  }
+
+  public static RoleRecordInfo makeRoleInfoAsAdmin(Integer id) {
+    return new RoleRecordInfo(id, RoleEnum.ADMIN.toString());
   }
 }

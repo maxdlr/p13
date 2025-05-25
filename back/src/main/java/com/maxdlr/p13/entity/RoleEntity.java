@@ -1,16 +1,11 @@
 package com.maxdlr.p13.entity;
 
-import java.util.List;
-
 import com.maxdlr.p13.enums.RoleEnum;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -31,7 +26,4 @@ public class RoleEntity extends AbstractEntity {
 
   @Column(nullable = false, unique = true)
   private RoleEnum name;
-
-  @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  private List<UserEntity> users;
 }
