@@ -17,7 +17,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
   @Override
   public void configureMessageBroker(@Nonnull MessageBrokerRegistry config) {
-    config.enableSimpleBroker("/view");
+    config.enableSimpleBroker("/topic");
     config.setApplicationDestinationPrefixes("/app");
   }
 }
