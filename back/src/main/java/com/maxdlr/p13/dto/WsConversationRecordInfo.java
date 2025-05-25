@@ -2,7 +2,7 @@ package com.maxdlr.p13.dto;
 
 public record WsConversationRecordInfo(
     Integer id,
-    String wstopic,
+    String wsTopic,
     UserRecordInfo user,
     String status) {
   public Integer getId() {
@@ -10,7 +10,7 @@ public record WsConversationRecordInfo(
   }
 
   public String getWsTopic() {
-    return wstopic;
+    return wsTopic;
   }
 
   public UserRecordInfo getUser() {

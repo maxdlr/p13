@@ -8,7 +8,7 @@ public record WsConversationRecordInput(
     return id;
   }
 
-  public Integer getUser() {
+  public Integer getUserId() {
     return userId;
   }
 }

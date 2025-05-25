@@ -5,9 +5,12 @@ import java.util.List;
 
 import com.maxdlr.p13.dto.RoleRecordInfo;
 import com.maxdlr.p13.dto.UserRecordInfo;
+import com.maxdlr.p13.dto.WsConversationRecordInfo;
 import com.maxdlr.p13.entity.RoleEntity;
 import com.maxdlr.p13.entity.UserEntity;
+import com.maxdlr.p13.entity.WsConversationEntity;
 import com.maxdlr.p13.enums.RoleEnum;
+import com.maxdlr.p13.enums.WsConversationStatusEnum;
 
 public class TestUtils {
 
@@ -50,5 +53,18 @@ public class TestUtils {
 
   public static RoleRecordInfo makeRoleInfoAsAdmin(Integer id) {
     return new RoleRecordInfo(id, RoleEnum.ADMIN.toString());
+  }
+
+  public static WsConversationEntity makeWsConversationEntity(Integer id, Integer userId,
+      WsConversationStatusEnum status) {
+    return new WsConversationEntity()
+        .setId(id)
+        .setWsTopic("topic" + id)
+        .setUser(makeUserEntity(userId))
+        .setStatus(status);
+  }
+
+  public static WsConversationRecordInfo makeWsConversationInfo(Integer id, Integer userId, String status) {
+    return new WsConversationRecordInfo(id, "topic" + id, makeUserInfo(userId), status);
   }
 }
