@@ -17,6 +17,13 @@ public class ControllerExceptionHandler {
         .body(new ErrorMessageResponse(exception.getMessage(), HttpStatus.NOT_FOUND));
   }
 
+  @ExceptionHandler(MessageNotFoundException.class)
+  public ResponseEntity<Object> handleApiResourceNotFoundException(
+      MessageNotFoundException exception) {
+    return ResponseEntity.status(HttpStatus.NOT_FOUND)
+        .body(new ErrorMessageResponse(exception.getMessage(), HttpStatus.NOT_FOUND));
+  }
+
   @ExceptionHandler(ConversationNotFoundException.class)
   public ResponseEntity<Object> handleApiResourceNotFoundException(
       ConversationNotFoundException exception) {

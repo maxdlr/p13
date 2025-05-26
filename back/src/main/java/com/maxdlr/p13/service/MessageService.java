@@ -1,22 +1,23 @@
 package com.maxdlr.p13.service;
 
 import java.util.List;
-import java.util.Optional;
 
+import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.stereotype.Service;
 
 import com.maxdlr.p13.dto.MessageRecordInfo;
 import com.maxdlr.p13.dto.MessageRecordInput;
-import com.maxdlr.p13.entity.UserEntity;
 import com.maxdlr.p13.entity.ConversationEntity;
 import com.maxdlr.p13.entity.MessageEntity;
+import com.maxdlr.p13.entity.UserEntity;
 import com.maxdlr.p13.enums.MessageStatusEnum;
 import com.maxdlr.p13.exception.ConversationNotFoundException;
+import com.maxdlr.p13.exception.MessageNotFoundException;
 import com.maxdlr.p13.exception.MessageUserNotFoundException;
 import com.maxdlr.p13.mapper.MessageMapper;
-import com.maxdlr.p13.repository.UserRepository;
 import com.maxdlr.p13.repository.ConversationRepository;
 import com.maxdlr.p13.repository.MessageRepository;
+import com.maxdlr.p13.repository.UserRepository;
 
 @Service
 public class MessageService {
@@ -40,7 +41,7 @@ public class MessageService {
     this.messageMapper = messageMapper;
   }
 
-  public MessageRecordInfo pushMessage(final MessageRecordInput messageInput, final MessageStatusEnum status) {
+  public MessageRecordInfo push(final MessageRecordInput messageInput, final MessageStatusEnum status) {
     UserEntity user = this.userRepository.findOneById(messageInput.getUserId())
         .orElseThrow(() -> new MessageUserNotFoundException(
             "Cannot user associated with user with id: " + messageInput.getUserId()));
@@ -69,7 +70,18 @@ public class MessageService {
     return this.messageMapper.toRecordInfo(messageEntity);
   }
 
-  public List<MessageRecordInfo> getAllFromUser(Integer userId) {
+  public List<MessageRecordInfo> findAllByUser(Integer userId) {
     return this.messageMapper.toRecordInfo(this.messageRepository.findByUserId(userId));
+  }
+
+  public MessageRecordInfo findById(Integer id) {
+    MessageEntity message = this.messageRepository.findOneById(id)
+        .orElseThrow(() -> new MessageNotFoundException("Cannot find message with id: " + id));
+    return this.messageMapper.toRecordInfo(message);
+  }
+
+  public List<MessageRecordInfo> findAllByConversation(Integer conversationId) {
+    List<MessageEntity> messages = this.messageRepository.findByConversationId(conversationId);
+    return this.messageMapper.toRecordInfo(messages);
   }
 }

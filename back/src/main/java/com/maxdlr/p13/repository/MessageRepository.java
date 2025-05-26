@@ -8,4 +8,6 @@ import com.maxdlr.p13.entity.MessageEntity;
 
 public interface MessageRepository extends Repository<MessageEntity, Long>, CrudRepository<MessageEntity> {
   List<MessageEntity> findByUserId(Integer userId);
+
+  List<MessageEntity> findByConversationId(Integer conversationId);
 }

@@ -16,7 +16,7 @@ import com.maxdlr.p13.enums.ConversationStatusEnum;
 
 public class ConversationMapperTests {
 
-  ConversationMapperImpl conversationMapper;
+  ConversationMapper conversationMapper;
 
   @BeforeEach
   public void setUp() {

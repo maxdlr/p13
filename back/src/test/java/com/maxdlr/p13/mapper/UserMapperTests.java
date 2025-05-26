@@ -11,11 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import com.maxdlr.p13.TestUtils;
 import com.maxdlr.p13.dto.UserRecordInfo;
-import com.maxdlr.p13.entity.RoleEntity;
 import com.maxdlr.p13.entity.UserEntity;
-import com.maxdlr.p13.enums.RoleEnum;
-
-import graphql.AssertException;
 
 public class UserMapperTests {
 

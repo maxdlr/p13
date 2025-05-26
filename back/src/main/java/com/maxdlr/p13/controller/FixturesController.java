@@ -4,8 +4,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.maxdlr.p13.dto.RoleRecordInfo;
-import com.maxdlr.p13.dto.UserRecordInfo;
 import com.maxdlr.p13.entity.RoleEntity;
 import com.maxdlr.p13.entity.UserEntity;
 import com.maxdlr.p13.enums.RoleEnum;

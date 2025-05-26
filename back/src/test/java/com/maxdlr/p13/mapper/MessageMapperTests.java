@@ -16,7 +16,7 @@ import com.maxdlr.p13.enums.MessageStatusEnum;
 
 public class MessageMapperTests {
 
-  MessageMapperImpl messageMapper;
+  MessageMapper messageMapper;
 
   @BeforeEach
   public void setUp() {

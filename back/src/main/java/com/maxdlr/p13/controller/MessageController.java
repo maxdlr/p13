@@ -23,18 +23,22 @@ public class MessageController {
 
   @QueryMapping
   public List<MessageRecordInfo> GetAllMessagesOfUser(@Argument Integer userId) {
-    return this.messageService.getAllFromUser(userId);
+    return this.messageService.findAllByUser(userId);
   }
 
-  @MutationMapping()
+  @QueryMapping
+  public MessageRecordInfo GetMessage(@Argument Integer id) {
+    return this.messageService.findById(id);
+  }
+
+  @QueryMapping
+  public List<MessageRecordInfo> GetAllMessagesOfConversation(@Argument Integer conversationId) {
+    return this.messageService.findAllByConversation(conversationId);
+  }
+
+  @MutationMapping
   public MessageRecordInfo CreateMessage(
       @Argument MessageRecordInput message) {
-
-    MessageRecordInfo messageInfo = this.messageService.pushMessage(message, MessageStatusEnum.SENT);
-
-    System.out.println(
-        messageInfo.toString() + "----------------------------------------------------------------------------------");
-
-    return messageInfo;
+    return this.messageService.push(message, MessageStatusEnum.SENT);
   }
 }
