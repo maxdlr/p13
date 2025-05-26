@@ -20,7 +20,7 @@ public class ConversationMapperTests {
 
   @BeforeEach
   public void setUp() {
-    conversationMapper = new ConversationMapperImpl();
+    this.conversationMapper = new ConversationMapperImpl();
   }
 
   @Test

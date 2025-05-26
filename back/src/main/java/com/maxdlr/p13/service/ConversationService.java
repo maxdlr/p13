@@ -6,9 +6,12 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import com.maxdlr.p13.dto.ConversationRecordInfo;
+import com.maxdlr.p13.dto.ConversationRecordInput;
 import com.maxdlr.p13.entity.UserEntity;
 import com.maxdlr.p13.entity.ConversationEntity;
 import com.maxdlr.p13.enums.ConversationStatusEnum;
+import com.maxdlr.p13.exception.ConversationNotFoundException;
+import com.maxdlr.p13.exception.ConversationUserNotFoundException;
 import com.maxdlr.p13.mapper.ConversationMapper;
 import com.maxdlr.p13.repository.UserRepository;
 import com.maxdlr.p13.repository.ConversationRepository;
@@ -29,7 +32,13 @@ public class ConversationService {
     this.conversationMapper = conversationMapper;
   }
 
-  public ConversationEntity openConversation(UserEntity user) {
+  public ConversationEntity openConversation(ConversationRecordInput conversationInput) {
+    UserEntity user = this.userRepository
+        .findOneById(conversationInput
+            .getUserId())
+        .orElseThrow(() -> new ConversationUserNotFoundException(
+            "Cannot find conversation user of id : " + conversationInput.getUserId()));
+
     ConversationEntity conversation = new ConversationEntity()
         .setWsTopic(this.generateTopicName(user))
         .setUser(user)
@@ -42,7 +51,19 @@ public class ConversationService {
     return this.conversationMapper.toRecordInfo(this.conversationRepository.findAll());
   }
 
+  public List<ConversationRecordInfo> findByUser(Integer userId) {
+    List<ConversationEntity> conversations = this.conversationRepository.findAllByUserId(userId);
+    return this.conversationMapper.toRecordInfo(conversations);
+  }
+
+  public ConversationRecordInfo findOneById(Integer id) {
+    ConversationEntity conversation = this.conversationRepository.findOneById(id)
+        .orElseThrow(() -> new ConversationNotFoundException("Cannot find conversation with id: " + id));
+    return this.conversationMapper.toRecordInfo(conversation);
+  }
+
   private String generateTopicName(UserEntity user) {
     return UUID.randomUUID().toString() + "-" + user.getEmail();
   }
+
 }

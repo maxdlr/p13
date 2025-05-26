@@ -19,7 +19,7 @@ public class UserMapperTests {
 
   @BeforeEach
   public void setUp() {
-    userMapper = new UserMapperImpl();
+    this.userMapper = new UserMapperImpl();
   }
 
   @Test

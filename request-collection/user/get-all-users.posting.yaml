@@ -1,0 +1,12 @@
+name: get all users
+method: POST
+url: http://localhost:8080/graphql
+body:
+  content: |-
+    {
+      "query": "query GetAllUsers { GetAllUsers { id firstname lastname email }}"
+    }
+  content_type: application/json
+headers:
+- name: content-type
+  value: application/json

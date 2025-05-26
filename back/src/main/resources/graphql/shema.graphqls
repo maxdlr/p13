@@ -1,13 +1,11 @@
 type Query {
   GetUser(id: ID): UserInfo
   GetAllUsers: [UserInfo]!
-  GetAllUsersOfConversation(conversationId: ID): [UserInfo]!
+  GetUserOfConversation(conversationId: ID): UserInfo!
 
-  GetRoleOfUser(userId: ID): RoleInfo
-
-  GetMessage(id: ID): WsMessageInfo
-  GetAllMessagesOfConversation(conversationId: ID): [WsMessageInfo]!
-  GetAllMessagesOfUser(userId: ID): [WsMessageInfo]!
+  GetMessage(id: ID): MessageInfo
+  GetAllMessagesOfConversation(conversationId: ID): [MessageInfo]!
+  GetAllMessagesOfUser(userId: ID): [MessageInfo]!
 
   GetAllConversationsOfUser(userId: ID): [ConversationInfo]!
   GetAllConversations: [ConversationInfo]!
@@ -19,7 +17,7 @@ type Mutation {
 
   CreateConversation(conversation: ConversationInput): ConversationInfo
 
-  CreateMessage(message: WsMessageInput): WsMessageInfo
+  CreateMessage(message: MessageInput): MessageInfo
 }
 
 type UserInfo {
@@ -29,7 +27,7 @@ type UserInfo {
   lastname: String
   phoneNumber: String
   isActive: Boolean
-  roles: [RoleInfo]
+  role: RoleInfo
 }
 
 input UserInput {
@@ -59,13 +57,12 @@ type ConversationInfo {
 }
 
 input ConversationInput {
-  id: ID
   userId: ID
 }
 
 # -------------------------------------------------
 
-type WsMessageInfo {
+type MessageInfo {
   id: ID
   content: String
   user: UserInfo
@@ -73,7 +70,7 @@ type WsMessageInfo {
   status: String
 }
 
-input WsMessageInput {
+input MessageInput {
   content: String
   userId: ID
   conversationId: ID

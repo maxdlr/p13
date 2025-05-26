@@ -1,33 +1,39 @@
 package com.maxdlr.p13.exception;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.maxdlr.p13.requests.response.ErrorMessageResponse;
+import com.maxdlr.p13.dto.ErrorRecordInfo;
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
 
+  private ErrorRecordInfo sendErrorInfo(Exception exception, HttpStatus status) {
+    return new ErrorRecordInfo(exception.getMessage(), status);
+  }
+
   @ExceptionHandler(MessageUserNotFoundException.class)
-  public ResponseEntity<Object> handleApiResourceNotFoundException(
+  public ErrorRecordInfo handleApiResourceNotFoundException(
       MessageUserNotFoundException exception) {
-    return ResponseEntity.status(HttpStatus.NOT_FOUND)
-        .body(new ErrorMessageResponse(exception.getMessage(), HttpStatus.NOT_FOUND));
+    return this.sendErrorInfo(exception, HttpStatus.NOT_FOUND);
+  }
+
+  @ExceptionHandler(ConversationUserNotFoundException.class)
+  public ErrorRecordInfo handleApiResourceNotFoundException(
+      ConversationUserNotFoundException exception) {
+    return this.sendErrorInfo(exception, HttpStatus.NOT_FOUND);
   }
 
   @ExceptionHandler(MessageNotFoundException.class)
-  public ResponseEntity<Object> handleApiResourceNotFoundException(
+  public ErrorRecordInfo handleApiResourceNotFoundException(
       MessageNotFoundException exception) {
-    return ResponseEntity.status(HttpStatus.NOT_FOUND)
-        .body(new ErrorMessageResponse(exception.getMessage(), HttpStatus.NOT_FOUND));
+    return this.sendErrorInfo(exception, HttpStatus.NOT_FOUND);
   }
 
   @ExceptionHandler(ConversationNotFoundException.class)
-  public ResponseEntity<Object> handleApiResourceNotFoundException(
+  public ErrorRecordInfo handleApiResourceNotFoundException(
       ConversationNotFoundException exception) {
-    return ResponseEntity.status(HttpStatus.NOT_FOUND)
-        .body(new ErrorMessageResponse(exception.getMessage(), HttpStatus.NOT_FOUND));
+    return this.sendErrorInfo(exception, HttpStatus.NOT_FOUND);
   }
 }

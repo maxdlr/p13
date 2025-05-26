@@ -19,7 +19,7 @@ public class RoleMapperTests {
 
   @BeforeEach
   public void setUp() {
-    roleMapper = new RoleMapperImpl();
+    this.roleMapper = new RoleMapperImpl();
   }
 
   @Test

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.stereotype.Service;
 
+import com.maxdlr.p13.dto.ConversationRecordInput;
 import com.maxdlr.p13.dto.MessageRecordInfo;
 import com.maxdlr.p13.dto.MessageRecordInput;
 import com.maxdlr.p13.entity.ConversationEntity;
@@ -49,7 +50,7 @@ public class MessageService {
     ConversationEntity conversation = null;
 
     if (messageInput.getConversationId() == null) {
-      conversation = this.conversationService.openConversation(user);
+      conversation = this.conversationService.openConversation(new ConversationRecordInput(user.getId()));
     } else {
       conversation = this.conversationRepository
           .findOneById(messageInput.getConversationId())
@@ -74,7 +75,7 @@ public class MessageService {
     return this.messageMapper.toRecordInfo(this.messageRepository.findByUserId(userId));
   }
 
-  public MessageRecordInfo findById(Integer id) {
+  public MessageRecordInfo findOneById(Integer id) {
     MessageEntity message = this.messageRepository.findOneById(id)
         .orElseThrow(() -> new MessageNotFoundException("Cannot find message with id: " + id));
     return this.messageMapper.toRecordInfo(message);

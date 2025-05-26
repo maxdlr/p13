@@ -1,0 +1,12 @@
+name: get conversation user
+method: POST
+url: http://localhost:8080/graphql
+body:
+  content: |-
+    {
+      "query": "query { GetUserOfConversation(conversationId: 1) { id firstname lastname email }}"
+    }
+  content_type: application/json
+headers:
+- name: content-type
+  value: application/json

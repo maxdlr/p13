@@ -28,7 +28,7 @@ public class MessageController {
 
   @QueryMapping
   public MessageRecordInfo GetMessage(@Argument Integer id) {
-    return this.messageService.findById(id);
+    return this.messageService.findOneById(id);
   }
 
   @QueryMapping

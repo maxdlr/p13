@@ -18,7 +18,7 @@ pt: ## Run Posting with the project request collection
 	posting --collection ./request-collection
 
 back-run: ## Run the backend app
-	cd back && mvn clean spring-boot:run -DskipTests
+	cd back && mvn clean install spring-boot:run -DskipTests
 
 back-tests: ## Run the backend tests
 	cd back && mvn clean test && open target/site/jacoco/index.html
