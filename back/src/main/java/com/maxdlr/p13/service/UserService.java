@@ -3,6 +3,7 @@ package com.maxdlr.p13.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.maxdlr.p13.dto.UserRecordInfo;
 import com.maxdlr.p13.entity.ConversationEntity;
@@ -20,7 +21,7 @@ public class UserService {
   UserMapper userMapper;
   ConversationRepository conversationRepository;
 
-  UserService(UserRepository userRepository,
+  public UserService(UserRepository userRepository,
       UserMapper userMapper,
       ConversationRepository conversationRepository) {
     this.userRepository = userRepository;
@@ -28,16 +29,19 @@ public class UserService {
     this.conversationRepository = conversationRepository;
   }
 
+  @Transactional(readOnly = true)
   public UserRecordInfo findOneById(Integer id) {
     UserEntity user = this.userRepository.findOneById(id)
         .orElseThrow(() -> new UserNotFoundException("Cannot find user with id: " + id));
     return this.userMapper.toRecordInfo(user);
   }
 
+  @Transactional(readOnly = true)
   public List<UserRecordInfo> findAll() {
     return this.userMapper.toRecordInfo(this.userRepository.findAll());
   }
 
+  @Transactional(readOnly = true)
   public UserRecordInfo findByConversation(Integer conversationId) {
     ConversationEntity conversation = this.conversationRepository.findOneById(conversationId)
         .orElseThrow(() -> new ConversationNotFoundException(("Cannot find conversation with id: " + conversationId)));

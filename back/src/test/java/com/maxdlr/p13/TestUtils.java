@@ -18,8 +18,7 @@ import com.sun.jna.platform.win32.Netapi32Util.UserInfo;
 
 public class TestUtils {
 
-  public static UserEntity makeUserEntity(Integer id) {
-    RoleEntity userRole = makeRoleEntityAsUser(1);
+  public static UserEntity makeUserEntity(Integer id, RoleEntity role) {
     return new UserEntity()
         .setId(id)
         .setEmail("max@max.com" + id)
@@ -28,7 +27,18 @@ public class TestUtils {
         .setLastname("dlr" + id)
         .setPhoneNumber("0123456789")
         .setIsActive(true)
-        .setRole(userRole);
+        .setRole(role);
+  }
+
+  public static UserEntity makeUserEntity(RoleEntity role) {
+    return new UserEntity()
+        .setEmail("max@max.com")
+        .setPassword("password")
+        .setFirstname("max")
+        .setLastname("dlr")
+        .setPhoneNumber("0123456789")
+        .setIsActive(true)
+        .setRole(role);
   }
 
   public static UserRecordInfo makeUserInfo(Integer id) {
@@ -47,8 +57,16 @@ public class TestUtils {
     return new RoleEntity().setId(id).setName(RoleEnum.USER);
   }
 
+  public static RoleEntity makeRoleEntityAsUser() {
+    return new RoleEntity().setName(RoleEnum.USER);
+  }
+
   public static RoleEntity makeRoleEntityAsAdmin(Integer id) {
     return new RoleEntity().setId(id).setName(RoleEnum.ADMIN);
+  }
+
+  public static RoleEntity makeRoleEntityAsAdmin() {
+    return new RoleEntity().setName(RoleEnum.ADMIN);
   }
 
   public static RoleRecordInfo makeRoleInfoAsUser(Integer id) {
@@ -59,12 +77,20 @@ public class TestUtils {
     return new RoleRecordInfo(id, RoleEnum.ADMIN.toString());
   }
 
-  public static ConversationEntity makeConversationEntity(Integer id, Integer userId,
+  public static ConversationEntity makeConversationEntity(Integer id, UserEntity user,
       ConversationStatusEnum status) {
     return new ConversationEntity()
         .setId(id)
         .setWsTopic("topic" + id)
-        .setUser(makeUserEntity(userId))
+        .setUser(user)
+        .setStatus(status);
+  }
+
+  public static ConversationEntity makeConversationEntity(UserEntity user,
+      ConversationStatusEnum status) {
+    return new ConversationEntity()
+        .setWsTopic("topic")
+        .setUser(user)
         .setStatus(status);
   }
 
@@ -73,13 +99,22 @@ public class TestUtils {
     return new ConversationRecordInfo(id, "topic" + id, makeUserInfo(userId), status.toString());
   }
 
-  public static MessageEntity makeMessageEntity(Integer id, Integer userId, Integer conversationId,
+  public static MessageEntity makeMessageEntity(Integer id, UserEntity user, ConversationEntity conversation,
       MessageStatusEnum status) {
     return new MessageEntity()
         .setId(id)
         .setContent("content" + id)
-        .setUser(makeUserEntity(userId))
-        .setConversation(makeConversationEntity(conversationId, userId, ConversationStatusEnum.USER_ACTIVE))
+        .setUser(user)
+        .setConversation(conversation)
+        .setStatus(MessageStatusEnum.SENT);
+  }
+
+  public static MessageEntity makeMessageEntity(UserEntity user, ConversationEntity conversation,
+      MessageStatusEnum status) {
+    return new MessageEntity()
+        .setContent("content")
+        .setUser(user)
+        .setConversation(conversation)
         .setStatus(MessageStatusEnum.SENT);
   }
 

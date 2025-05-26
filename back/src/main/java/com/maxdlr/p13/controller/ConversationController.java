@@ -19,7 +19,7 @@ public class ConversationController {
   ConversationService conversationService;
   ConversationMapper ConversationMapper;
 
-  ConversationController(ConversationService conversationService, ConversationMapper conversationMapper) {
+  public ConversationController(ConversationService conversationService, ConversationMapper conversationMapper) {
     this.conversationService = conversationService;
     this.ConversationMapper = conversationMapper;
   }

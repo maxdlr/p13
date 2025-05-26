@@ -17,7 +17,7 @@ public class MessageController {
 
   MessageService messageService;
 
-  MessageController(MessageService messageService) {
+  public MessageController(MessageService messageService) {
     this.messageService = messageService;
   }
 

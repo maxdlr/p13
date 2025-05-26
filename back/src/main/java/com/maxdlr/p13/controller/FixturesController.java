@@ -17,7 +17,7 @@ public class FixturesController {
   private RoleRepository roleRepository;
   private UserRepository userRepository;
 
-  FixturesController(RoleRepository roleRepository, UserRepository userRepository) {
+  public FixturesController(RoleRepository roleRepository, UserRepository userRepository) {
     this.roleRepository = roleRepository;
     this.userRepository = userRepository;
   }
@@ -27,8 +27,8 @@ public class FixturesController {
     RoleEntity userRole = new RoleEntity().setName(RoleEnum.USER);
     RoleEntity adminRole = new RoleEntity().setName(RoleEnum.ADMIN);
 
-    userRole = this.roleRepository.save(userRole);
-    adminRole = this.roleRepository.save(adminRole);
+    userRole = this.roleRepository.save  (userRole);
+    adminRole = this.roleRepository.save  (adminRole);
 
     UserEntity user = new UserEntity()
         .setEmail("max@max.com")
@@ -39,6 +39,6 @@ public class FixturesController {
         .setIsActive(true)
         .setRole(userRole);
 
-    this.userRepository.save(user);
+    this.userRepository.save  (user);
   }
 }

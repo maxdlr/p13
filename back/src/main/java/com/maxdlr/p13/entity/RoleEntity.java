@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
 
 @EqualsAndHashCode(callSuper = false)
 @Data
-@Table(name = "role", uniqueConstraints = { @UniqueConstraint(columnNames = "name") })
+@Table(name = "roles", uniqueConstraints = { @UniqueConstraint(columnNames = "name") })
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor

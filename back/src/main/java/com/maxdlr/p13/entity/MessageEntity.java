@@ -17,7 +17,7 @@ import lombok.experimental.Accessors;
 
 @EqualsAndHashCode(callSuper = false)
 @Data
-@Table(name = "message")
+@Table(name = "messages")
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor

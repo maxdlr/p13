@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.maxdlr.p13.dto.ConversationRecordInfo;
 import com.maxdlr.p13.dto.ConversationRecordInput;
@@ -23,7 +24,7 @@ public class ConversationService {
   UserRepository userRepository;
   ConversationMapper conversationMapper;
 
-  ConversationService(
+  public ConversationService(
       ConversationRepository conversationRepository,
       UserRepository userRepository,
       ConversationMapper conversationMapper) {
@@ -32,6 +33,7 @@ public class ConversationService {
     this.conversationMapper = conversationMapper;
   }
 
+  @Transactional
   public ConversationEntity openConversation(ConversationRecordInput conversationInput) {
     UserEntity user = this.userRepository
         .findOneById(conversationInput
@@ -47,15 +49,18 @@ public class ConversationService {
     return conversation;
   }
 
+  @Transactional(readOnly = true)
   public List<ConversationRecordInfo> getAllConversations() {
     return this.conversationMapper.toRecordInfo(this.conversationRepository.findAll());
   }
 
+  @Transactional(readOnly = true)
   public List<ConversationRecordInfo> findByUser(Integer userId) {
     List<ConversationEntity> conversations = this.conversationRepository.findAllByUserId(userId);
     return this.conversationMapper.toRecordInfo(conversations);
   }
 
+  @Transactional(readOnly = true)
   public ConversationRecordInfo findOneById(Integer id) {
     ConversationEntity conversation = this.conversationRepository.findOneById(id)
         .orElseThrow(() -> new ConversationNotFoundException("Cannot find conversation with id: " + id));

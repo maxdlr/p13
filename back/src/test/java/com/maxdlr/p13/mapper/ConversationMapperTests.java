@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import com.maxdlr.p13.TestUtils;
 import com.maxdlr.p13.dto.ConversationRecordInfo;
 import com.maxdlr.p13.entity.ConversationEntity;
+import com.maxdlr.p13.entity.RoleEntity;
+import com.maxdlr.p13.entity.UserEntity;
 import com.maxdlr.p13.enums.ConversationStatusEnum;
 
 public class ConversationMapperTests {
@@ -64,7 +66,9 @@ public class ConversationMapperTests {
 
   @Test
   public void toRecordInfoFromEntity() {
-    ConversationEntity entity = TestUtils.makeConversationEntity(1, 1, ConversationStatusEnum.ADMIN_ACTIVE);
+    RoleEntity role = TestUtils.makeRoleEntityAsUser(1);
+    UserEntity user = TestUtils.makeUserEntity(1, role);
+    ConversationEntity entity = TestUtils.makeConversationEntity(1, user, ConversationStatusEnum.ADMIN_ACTIVE);
 
     ConversationRecordInfo info = this.conversationMapper.toRecordInfo(entity);
 
@@ -79,10 +83,12 @@ public class ConversationMapperTests {
 
   @Test
   public void toRecordInfoFromEntityList() {
+    RoleEntity role = TestUtils.makeRoleEntityAsUser(1);
+    UserEntity user = TestUtils.makeUserEntity(1, role);
     List<ConversationEntity> entityList = new ArrayList<>();
 
     for (int i = 0; i < 10; i++) {
-      entityList.add(TestUtils.makeConversationEntity(i, 1, ConversationStatusEnum.USER_ACTIVE));
+      entityList.add(TestUtils.makeConversationEntity(i, user, ConversationStatusEnum.USER_ACTIVE));
     }
 
     List<ConversationRecordInfo> infoList = this.conversationMapper.toRecordInfo(entityList);

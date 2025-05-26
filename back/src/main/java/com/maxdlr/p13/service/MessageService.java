@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.maxdlr.p13.dto.ConversationRecordInput;
 import com.maxdlr.p13.dto.MessageRecordInfo;
@@ -29,7 +30,7 @@ public class MessageService {
   ConversationService conversationService;
   MessageMapper messageMapper;
 
-  MessageService(
+  public MessageService(
       MessageRepository messageRepository,
       ConversationRepository conversationRepository,
       UserRepository userRepository,
@@ -42,6 +43,7 @@ public class MessageService {
     this.messageMapper = messageMapper;
   }
 
+  @Transactional(readOnly = true)
   public MessageRecordInfo push(final MessageRecordInput messageInput, final MessageStatusEnum status) {
     UserEntity user = this.userRepository.findOneById(messageInput.getUserId())
         .orElseThrow(() -> new MessageUserNotFoundException(
@@ -71,16 +73,19 @@ public class MessageService {
     return this.messageMapper.toRecordInfo(messageEntity);
   }
 
+  @Transactional
   public List<MessageRecordInfo> findAllByUser(Integer userId) {
     return this.messageMapper.toRecordInfo(this.messageRepository.findByUserId(userId));
   }
 
+  @Transactional
   public MessageRecordInfo findOneById(Integer id) {
     MessageEntity message = this.messageRepository.findOneById(id)
         .orElseThrow(() -> new MessageNotFoundException("Cannot find message with id: " + id));
     return this.messageMapper.toRecordInfo(message);
   }
 
+  @Transactional
   public List<MessageRecordInfo> findAllByConversation(Integer conversationId) {
     List<MessageEntity> messages = this.messageRepository.findByConversationId(conversationId);
     return this.messageMapper.toRecordInfo(messages);

@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import com.maxdlr.p13.TestUtils;
 import com.maxdlr.p13.dto.UserRecordInfo;
+import com.maxdlr.p13.entity.RoleEntity;
 import com.maxdlr.p13.entity.UserEntity;
 
 public class UserMapperTests {
@@ -24,7 +25,8 @@ public class UserMapperTests {
 
   @Test
   public void testToRecordInfo() {
-    UserEntity entity = TestUtils.makeUserEntity(1);
+    RoleEntity role = TestUtils.makeRoleEntityAsUser(1);
+    UserEntity entity = TestUtils.makeUserEntity(1, role);
     UserRecordInfo info = this.userMapper.toRecordInfo(entity);
 
     assertNotNull(entity);
@@ -43,9 +45,10 @@ public class UserMapperTests {
 
   @Test
   public void testToRecordInfoList() {
+    RoleEntity role = TestUtils.makeRoleEntityAsUser(1);
     List<UserEntity> entities = new ArrayList<>();
     for (int i = 0; i < 10; i++) {
-      UserEntity entity = TestUtils.makeUserEntity(i);
+      UserEntity entity = TestUtils.makeUserEntity(i, role);
       entities.add(entity);
     }
 
