@@ -10,25 +10,25 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.maxdlr.p13.TestUtils;
-import com.maxdlr.p13.dto.WsMessageRecordInfo;
-import com.maxdlr.p13.entity.WsMessageEntity;
-import com.maxdlr.p13.enums.WsMessageStatusEnum;
+import com.maxdlr.p13.dto.MessageRecordInfo;
+import com.maxdlr.p13.entity.MessageEntity;
+import com.maxdlr.p13.enums.MessageStatusEnum;
 
-public class WsMessageMapperTests {
+public class MessageMapperTests {
 
-  WsMessageMapperImpl wsMessageMapper;
+  MessageMapperImpl messageMapper;
 
   @BeforeEach
   public void setUp() {
-    this.wsMessageMapper = new WsMessageMapperImpl();
+    this.messageMapper = new MessageMapperImpl();
   }
 
   @Test
   public void toEntityFromRecordInfo() {
-    WsMessageRecordInfo info = TestUtils.makeWsMessageInfo(1, 1, 1,
-        WsMessageStatusEnum.SENT);
+    MessageRecordInfo info = TestUtils.makeMessageInfo(1, 1, 1,
+        MessageStatusEnum.SENT);
 
-    WsMessageEntity entity = this.wsMessageMapper.toEntityFromInfo(info);
+    MessageEntity entity = this.messageMapper.toEntityFromInfo(info);
 
     assertNotNull(info);
     assertNotNull(entity);
@@ -37,22 +37,22 @@ public class WsMessageMapperTests {
     assertEquals(info.getUser().getId(), entity.getUser().getId());
     assertEquals(info.getStatus(), entity.getStatus().toString());
     assertEquals(info.getContent(), entity.getContent());
-    assertEquals(info.getWsConversation().getId(), entity.getWsConversation().getId());
+    assertEquals(info.getConversation().getId(), entity.getConversation().getId());
   }
 
   @Test
   public void toEntityFromRecordInfoList() {
-    List<WsMessageRecordInfo> infoList = new ArrayList<>();
+    List<MessageRecordInfo> infoList = new ArrayList<>();
 
     for (int i = 0; i < 10; i++) {
-      infoList.add(TestUtils.makeWsMessageInfo(i, 1, 1, WsMessageStatusEnum.SENT));
+      infoList.add(TestUtils.makeMessageInfo(i, 1, 1, MessageStatusEnum.SENT));
     }
 
-    List<WsMessageEntity> entityList = this.wsMessageMapper.toEntityFromInfo(infoList);
+    List<MessageEntity> entityList = this.messageMapper.toEntityFromInfo(infoList);
 
     for (int i = 0; i < infoList.size() - 1; i++) {
-      WsMessageRecordInfo info = infoList.get(i);
-      WsMessageEntity entity = entityList.get(i);
+      MessageRecordInfo info = infoList.get(i);
+      MessageEntity entity = entityList.get(i);
       assertNotNull(info);
       assertNotNull(entity);
 
@@ -60,15 +60,15 @@ public class WsMessageMapperTests {
       assertEquals(info.getUser().getId(), entity.getUser().getId());
       assertEquals(info.getStatus(), entity.getStatus().toString());
       assertEquals(info.getContent(), entity.getContent());
-      assertEquals(info.getWsConversation().getId(), entity.getWsConversation().getId());
+      assertEquals(info.getConversation().getId(), entity.getConversation().getId());
     }
   }
 
   @Test
   public void toRecordInfoFromEntity() {
-    WsMessageEntity entity = TestUtils.makeWsMessageEntity(1, 1, 1, WsMessageStatusEnum.SENT);
+    MessageEntity entity = TestUtils.makeMessageEntity(1, 1, 1, MessageStatusEnum.SENT);
 
-    WsMessageRecordInfo info = this.wsMessageMapper.toRecordInfo(entity);
+    MessageRecordInfo info = this.messageMapper.toRecordInfo(entity);
 
     assertNotNull(info);
     assertNotNull(entity);
@@ -77,22 +77,22 @@ public class WsMessageMapperTests {
     assertEquals(info.getUser().getId(), entity.getUser().getId());
     assertEquals(info.getStatus(), entity.getStatus().toString());
     assertEquals(info.getContent(), entity.getContent());
-    assertEquals(info.getWsConversation().getId(), entity.getWsConversation().getId());
+    assertEquals(info.getConversation().getId(), entity.getConversation().getId());
   }
 
   @Test
   public void toRecordInfoFromEntityList() {
-    List<WsMessageEntity> entityList = new ArrayList<>();
+    List<MessageEntity> entityList = new ArrayList<>();
 
     for (int i = 0; i < 10; i++) {
-      entityList.add(TestUtils.makeWsMessageEntity(i, 1, 1, WsMessageStatusEnum.SENT));
+      entityList.add(TestUtils.makeMessageEntity(i, 1, 1, MessageStatusEnum.SENT));
     }
 
-    List<WsMessageRecordInfo> infoList = this.wsMessageMapper.toRecordInfo(entityList);
+    List<MessageRecordInfo> infoList = this.messageMapper.toRecordInfo(entityList);
 
     for (int i = 0; i < entityList.size() - 1; i++) {
-      WsMessageRecordInfo info = infoList.get(i);
-      WsMessageEntity entity = entityList.get(i);
+      MessageRecordInfo info = infoList.get(i);
+      MessageEntity entity = entityList.get(i);
       assertNotNull(info);
       assertNotNull(entity);
 
@@ -100,7 +100,7 @@ public class WsMessageMapperTests {
       assertEquals(info.getUser().getId(), entity.getUser().getId());
       assertEquals(info.getStatus(), entity.getStatus().toString());
       assertEquals(info.getContent(), entity.getContent());
-      assertEquals(info.getWsConversation().getId(), entity.getWsConversation().getId());
+      assertEquals(info.getConversation().getId(), entity.getConversation().getId());
     }
   }
 }

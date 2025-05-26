@@ -1,6 +1,6 @@
 package com.maxdlr.p13.enums;
 
-public enum WsConversationStatusEnum {
+public enum ConversationStatusEnum {
   ADMIN_ACTIVE,
   ADMIN_INACTIVE,
   USER_ACTIVE,

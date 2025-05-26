@@ -4,7 +4,7 @@ url: http://localhost:8080/graphql
 body:
   content: |-
     {
-      "query": "query GetAllMessagesOfUser(userId: 1) { id content }"
+      "query": "query GetAllMessagesOfUser { GetAllMessagesOfUser(userId: 1) { id content user { id firstname lastname email } conversation { id wsTopic } }}"
     }
   content_type: application/json
 headers:

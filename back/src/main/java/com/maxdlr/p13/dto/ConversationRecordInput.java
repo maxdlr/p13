@@ -1,6 +1,6 @@
 package com.maxdlr.p13.dto;
 
-public record WsConversationRecordInput(
+public record ConversationRecordInput(
     Integer id,
     Integer userId) {
 

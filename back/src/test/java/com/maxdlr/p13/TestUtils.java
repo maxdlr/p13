@@ -5,15 +5,15 @@ import java.util.List;
 
 import com.maxdlr.p13.dto.RoleRecordInfo;
 import com.maxdlr.p13.dto.UserRecordInfo;
-import com.maxdlr.p13.dto.WsConversationRecordInfo;
-import com.maxdlr.p13.dto.WsMessageRecordInfo;
+import com.maxdlr.p13.dto.ConversationRecordInfo;
+import com.maxdlr.p13.dto.MessageRecordInfo;
 import com.maxdlr.p13.entity.RoleEntity;
 import com.maxdlr.p13.entity.UserEntity;
-import com.maxdlr.p13.entity.WsConversationEntity;
-import com.maxdlr.p13.entity.WsMessageEntity;
+import com.maxdlr.p13.entity.ConversationEntity;
+import com.maxdlr.p13.entity.MessageEntity;
 import com.maxdlr.p13.enums.RoleEnum;
-import com.maxdlr.p13.enums.WsConversationStatusEnum;
-import com.maxdlr.p13.enums.WsMessageStatusEnum;
+import com.maxdlr.p13.enums.ConversationStatusEnum;
+import com.maxdlr.p13.enums.MessageStatusEnum;
 import com.sun.jna.platform.win32.Netapi32Util.UserInfo;
 
 public class TestUtils {
@@ -59,43 +59,43 @@ public class TestUtils {
     return new RoleRecordInfo(id, RoleEnum.ADMIN.toString());
   }
 
-  public static WsConversationEntity makeWsConversationEntity(Integer id, Integer userId,
-      WsConversationStatusEnum status) {
-    return new WsConversationEntity()
+  public static ConversationEntity makeConversationEntity(Integer id, Integer userId,
+      ConversationStatusEnum status) {
+    return new ConversationEntity()
         .setId(id)
         .setWsTopic("topic" + id)
         .setUser(makeUserEntity(userId))
         .setStatus(status);
   }
 
-  public static WsConversationRecordInfo makeWsConversationInfo(Integer id, Integer userId,
-      WsConversationStatusEnum status) {
-    return new WsConversationRecordInfo(id, "topic" + id, makeUserInfo(userId), status.toString());
+  public static ConversationRecordInfo makeConversationInfo(Integer id, Integer userId,
+      ConversationStatusEnum status) {
+    return new ConversationRecordInfo(id, "topic" + id, makeUserInfo(userId), status.toString());
   }
 
-  public static WsMessageEntity makeWsMessageEntity(Integer id, Integer userId, Integer conversationId,
-      WsMessageStatusEnum status) {
-    return new WsMessageEntity()
+  public static MessageEntity makeMessageEntity(Integer id, Integer userId, Integer conversationId,
+      MessageStatusEnum status) {
+    return new MessageEntity()
         .setId(id)
         .setContent("content" + id)
         .setUser(makeUserEntity(userId))
-        .setWsConversation(makeWsConversationEntity(conversationId, userId, WsConversationStatusEnum.USER_ACTIVE))
-        .setStatus(WsMessageStatusEnum.SENT);
+        .setConversation(makeConversationEntity(conversationId, userId, ConversationStatusEnum.USER_ACTIVE))
+        .setStatus(MessageStatusEnum.SENT);
   }
 
-  public static WsMessageRecordInfo makeWsMessageInfo(
+  public static MessageRecordInfo makeMessageInfo(
       Integer id,
       Integer userId,
       Integer conversationId,
-      WsMessageStatusEnum status) {
-    return new WsMessageRecordInfo(
+      MessageStatusEnum status) {
+    return new MessageRecordInfo(
         id,
         "content" + id,
         makeUserInfo(userId),
-        makeWsConversationInfo(
+        makeConversationInfo(
             conversationId,
             userId,
-            WsConversationStatusEnum.USER_ACTIVE),
+            ConversationStatusEnum.USER_ACTIVE),
         status.toString());
   }
 }

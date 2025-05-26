@@ -1,6 +1,6 @@
 package com.maxdlr.p13.dto;
 
-public record WsConversationRecordInfo(
+public record ConversationRecordInfo(
     Integer id,
     String wsTopic,
     UserRecordInfo user,

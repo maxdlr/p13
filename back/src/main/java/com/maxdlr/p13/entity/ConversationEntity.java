@@ -1,7 +1,7 @@
 
 package com.maxdlr.p13.entity;
 
-import com.maxdlr.p13.enums.WsConversationStatusEnum;
+import com.maxdlr.p13.enums.ConversationStatusEnum;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,14 +17,14 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 @Data
-@Table(name = "ws_conversation", uniqueConstraints = { @UniqueConstraint(columnNames = "wsTopic") })
+@Table(name = "conversation", uniqueConstraints = { @UniqueConstraint(columnNames = "wsTopic") })
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Accessors(chain = true)
-public class WsConversationEntity extends AbstractEntity {
+public class ConversationEntity extends AbstractEntity {
 
   @Id
   @GeneratedValue
@@ -37,5 +37,5 @@ public class WsConversationEntity extends AbstractEntity {
   private UserEntity user;
 
   @Column(nullable = false)
-  private WsConversationStatusEnum status;
+  private ConversationStatusEnum status;
 }

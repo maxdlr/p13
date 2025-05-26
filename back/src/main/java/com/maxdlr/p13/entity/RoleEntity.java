@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 @Data
 @Table(name = "role", uniqueConstraints = { @UniqueConstraint(columnNames = "name") })
 @Entity

@@ -3,7 +3,7 @@ method: POST
 url: http://localhost:8080/graphql
 body:
   content: |-
-    { "query": "mutation CreateMessage { CreateMessage( message: { content: \"my created content\", userId: 1 } ) { id content user { id } conversation { id } status } }"
+    { "query": "mutation CreateMessage { CreateMessage( message: { content: \"my created content\", userId: 1 } ) { id content user { id email } conversation { id wsTopic } status } }"
     }
   content_type: application/json
 headers:

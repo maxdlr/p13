@@ -1,6 +1,6 @@
 package com.maxdlr.p13.entity;
 
-import com.maxdlr.p13.enums.WsMessageStatusEnum;
+import com.maxdlr.p13.enums.MessageStatusEnum;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,14 +15,14 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 @Data
-@Table(name = "ws_message")
+@Table(name = "message")
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Accessors(chain = true)
-public class WsMessageEntity extends AbstractEntity {
+public class MessageEntity extends AbstractEntity {
   @Id
   @GeneratedValue
   private Integer id;
@@ -34,8 +34,8 @@ public class WsMessageEntity extends AbstractEntity {
   private UserEntity user;
 
   @ManyToOne
-  private WsConversationEntity wsConversation;
+  private ConversationEntity conversation;
 
   @Column(nullable = false)
-  private WsMessageStatusEnum status;
+  private MessageStatusEnum status;
 }

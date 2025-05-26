@@ -5,14 +5,14 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.maxdlr.p13.dto.WsConversationRecordInfo;
-import com.maxdlr.p13.dto.WsConversationRecordInput;
-import com.maxdlr.p13.entity.WsConversationEntity;
+import com.maxdlr.p13.dto.ConversationRecordInfo;
+import com.maxdlr.p13.dto.ConversationRecordInput;
+import com.maxdlr.p13.entity.ConversationEntity;
 import com.maxdlr.p13.repository.UserRepository;
 
 @Mapper(componentModel = "spring")
-public abstract class WsConversationMapper
-    implements EntityMapper<WsConversationRecordInfo, WsConversationRecordInput, WsConversationEntity> {
+public abstract class ConversationMapper
+    implements EntityMapper<ConversationRecordInfo, ConversationRecordInput, ConversationEntity> {
 
   @Autowired
   public UserRepository userRepository;
@@ -20,5 +20,5 @@ public abstract class WsConversationMapper
   @Mappings({
       @Mapping(target = "user", expression = "java(this.userRepository.findOneById(input.getUserId()).get())")
   })
-  public abstract WsConversationEntity toEntityFromInput(WsConversationRecordInput input);
+  public abstract ConversationEntity toEntityFromInput(ConversationRecordInput input);
 }

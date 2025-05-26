@@ -1,10 +1,10 @@
 package com.maxdlr.p13.dto;
 
-public record WsMessageRecordInfo(
+public record MessageRecordInfo(
     Integer id,
     String content,
     UserRecordInfo user,
-    WsConversationRecordInfo wsConversation,
+    ConversationRecordInfo conversation,
     String status) {
 
   public Integer getId() {
@@ -19,8 +19,8 @@ public record WsMessageRecordInfo(
     return user;
   }
 
-  public WsConversationRecordInfo getWsConversation() {
-    return wsConversation;
+  public ConversationRecordInfo getConversation() {
+    return conversation;
   }
 
   public String getStatus() {

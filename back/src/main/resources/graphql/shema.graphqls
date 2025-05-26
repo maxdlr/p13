@@ -9,14 +9,15 @@ type Query {
   GetAllMessagesOfConversation(conversationId: ID): [WsMessageInfo]!
   GetAllMessagesOfUser(userId: ID): [WsMessageInfo]!
 
-  GetAllConversationsOfUser(userId: ID): [WsConversationInfo]!
-  GetConversation(id: ID): WsConversationInfo
+  GetAllConversationsOfUser(userId: ID): [ConversationInfo]!
+  GetAllConversations: [ConversationInfo]!
+  GetConversation(id: ID): ConversationInfo
 }
 
 type Mutation {
   CreateUser(user: UserInput): UserInfo
 
-  CreateConversation(conversation: WsConversationInput): WsConversationInfo
+  CreateConversation(conversation: ConversationInput): ConversationInfo
 
   CreateMessage(message: WsMessageInput): WsMessageInfo
 }
@@ -50,14 +51,14 @@ type RoleInfo {
 
 # -------------------------------------------------
 
-type WsConversationInfo {
+type ConversationInfo {
   id: ID
   wsTopic: String
   user: UserInfo
   status: String
 }
 
-input WsConversationInput {
+input ConversationInput {
   id: ID
   userId: ID
 }
@@ -68,7 +69,7 @@ type WsMessageInfo {
   id: ID
   content: String
   user: UserInfo
-  conversation: WsConversationInfo
+  conversation: ConversationInfo
   status: String
 }
 

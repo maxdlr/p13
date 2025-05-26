@@ -10,25 +10,25 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.maxdlr.p13.TestUtils;
-import com.maxdlr.p13.dto.WsConversationRecordInfo;
-import com.maxdlr.p13.entity.WsConversationEntity;
-import com.maxdlr.p13.enums.WsConversationStatusEnum;
+import com.maxdlr.p13.dto.ConversationRecordInfo;
+import com.maxdlr.p13.entity.ConversationEntity;
+import com.maxdlr.p13.enums.ConversationStatusEnum;
 
-public class WsConversationMapperTests {
+public class ConversationMapperTests {
 
-  WsConversationMapperImpl wsConversationMapper;
+  ConversationMapperImpl conversationMapper;
 
   @BeforeEach
   public void setUp() {
-    wsConversationMapper = new WsConversationMapperImpl();
+    conversationMapper = new ConversationMapperImpl();
   }
 
   @Test
   public void toEntityFromRecordInfo() {
-    WsConversationRecordInfo info = TestUtils.makeWsConversationInfo(1, 1,
-        WsConversationStatusEnum.USER_ACTIVE);
+    ConversationRecordInfo info = TestUtils.makeConversationInfo(1, 1,
+        ConversationStatusEnum.USER_ACTIVE);
 
-    WsConversationEntity entity = this.wsConversationMapper.toEntityFromInfo(info);
+    ConversationEntity entity = this.conversationMapper.toEntityFromInfo(info);
 
     assertNotNull(info);
     assertNotNull(entity);
@@ -41,17 +41,17 @@ public class WsConversationMapperTests {
 
   @Test
   public void toEntityFromRecordInfoList() {
-    List<WsConversationRecordInfo> infoList = new ArrayList<>();
+    List<ConversationRecordInfo> infoList = new ArrayList<>();
 
     for (int i = 0; i < 10; i++) {
-      infoList.add(TestUtils.makeWsConversationInfo(i, 1, WsConversationStatusEnum.USER_ACTIVE));
+      infoList.add(TestUtils.makeConversationInfo(i, 1, ConversationStatusEnum.USER_ACTIVE));
     }
 
-    List<WsConversationEntity> entityList = this.wsConversationMapper.toEntityFromInfo(infoList);
+    List<ConversationEntity> entityList = this.conversationMapper.toEntityFromInfo(infoList);
 
     for (int i = 0; i < infoList.size() - 1; i++) {
-      WsConversationRecordInfo info = infoList.get(i);
-      WsConversationEntity entity = entityList.get(i);
+      ConversationRecordInfo info = infoList.get(i);
+      ConversationEntity entity = entityList.get(i);
       assertNotNull(info);
       assertNotNull(entity);
 
@@ -64,9 +64,9 @@ public class WsConversationMapperTests {
 
   @Test
   public void toRecordInfoFromEntity() {
-    WsConversationEntity entity = TestUtils.makeWsConversationEntity(1, 1, WsConversationStatusEnum.ADMIN_ACTIVE);
+    ConversationEntity entity = TestUtils.makeConversationEntity(1, 1, ConversationStatusEnum.ADMIN_ACTIVE);
 
-    WsConversationRecordInfo info = this.wsConversationMapper.toRecordInfo(entity);
+    ConversationRecordInfo info = this.conversationMapper.toRecordInfo(entity);
 
     assertNotNull(info);
     assertNotNull(entity);
@@ -79,17 +79,17 @@ public class WsConversationMapperTests {
 
   @Test
   public void toRecordInfoFromEntityList() {
-    List<WsConversationEntity> entityList = new ArrayList<>();
+    List<ConversationEntity> entityList = new ArrayList<>();
 
     for (int i = 0; i < 10; i++) {
-      entityList.add(TestUtils.makeWsConversationEntity(i, 1, WsConversationStatusEnum.USER_ACTIVE));
+      entityList.add(TestUtils.makeConversationEntity(i, 1, ConversationStatusEnum.USER_ACTIVE));
     }
 
-    List<WsConversationRecordInfo> infoList = this.wsConversationMapper.toRecordInfo(entityList);
+    List<ConversationRecordInfo> infoList = this.conversationMapper.toRecordInfo(entityList);
 
     for (int i = 0; i < entityList.size() - 1; i++) {
-      WsConversationRecordInfo info = infoList.get(i);
-      WsConversationEntity entity = entityList.get(i);
+      ConversationRecordInfo info = infoList.get(i);
+      ConversationEntity entity = entityList.get(i);
       assertNotNull(info);
       assertNotNull(entity);
 
