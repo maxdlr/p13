@@ -2,16 +2,19 @@ package com.maxdlr.p13;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import com.maxdlr.p13.dto.RoleRecordInfo;
 import com.maxdlr.p13.dto.UserRecordInfo;
 import com.maxdlr.p13.dto.ConversationRecordInfo;
 import com.maxdlr.p13.dto.MessageRecordInfo;
+import com.maxdlr.p13.dto.MessageRecordInput;
 import com.maxdlr.p13.entity.RoleEntity;
 import com.maxdlr.p13.entity.UserEntity;
 import com.maxdlr.p13.entity.ConversationEntity;
 import com.maxdlr.p13.entity.MessageEntity;
 import com.maxdlr.p13.enums.RoleEnum;
+import com.maxdlr.p13.value_object.TopicName;
 import com.maxdlr.p13.enums.ConversationStatusEnum;
 import com.maxdlr.p13.enums.MessageStatusEnum;
 import com.sun.jna.platform.win32.Netapi32Util.UserInfo;
@@ -32,7 +35,7 @@ public class TestUtils {
 
   public static UserEntity makeUserEntity(RoleEntity role) {
     return new UserEntity()
-        .setEmail("max@max.com")
+        .setEmail(UUID.randomUUID().toString() + "@max.com")
         .setPassword("password")
         .setFirstname("max")
         .setLastname("dlr")
@@ -89,7 +92,7 @@ public class TestUtils {
   public static ConversationEntity makeConversationEntity(UserEntity user,
       ConversationStatusEnum status) {
     return new ConversationEntity()
-        .setWsTopic("topic")
+        .setWsTopic(new TopicName(user).get())
         .setUser(user)
         .setStatus(status);
   }
@@ -132,5 +135,9 @@ public class TestUtils {
             userId,
             ConversationStatusEnum.USER_ACTIVE),
         status.toString());
+  }
+
+  public static MessageRecordInput makeMessageInput(Integer userId, Integer conversationId) {
+    return new MessageRecordInput("my test content", userId, conversationId);
   }
 }

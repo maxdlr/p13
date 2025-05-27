@@ -1,77 +1,77 @@
 type Query {
-  GetUser(id: ID): UserInfo
+  GetUser(id: ID): UserInfo!
   GetAllUsers: [UserInfo]!
   GetUserOfConversation(conversationId: ID): UserInfo!
 
-  GetMessage(id: ID): MessageInfo
+  GetMessage(id: ID): MessageInfo!
   GetAllMessagesOfConversation(conversationId: ID): [MessageInfo]!
   GetAllMessagesOfUser(userId: ID): [MessageInfo]!
 
   GetAllConversationsOfUser(userId: ID): [ConversationInfo]!
   GetAllConversations: [ConversationInfo]!
-  GetConversation(id: ID): ConversationInfo
+  GetConversation(id: ID): ConversationInfo!
 }
 
 type Mutation {
-  CreateUser(user: UserInput): UserInfo
+  CreateUser(user: UserInput!): UserInfo!
 
-  CreateConversation(conversation: ConversationInput): ConversationInfo
+  CreateConversation(conversation: ConversationInput!): ConversationInfo!
 
-  CreateMessage(message: MessageInput): MessageInfo
+  CreateMessage(message: MessageInput!): MessageInfo!
 }
 
 type UserInfo {
-  id: ID
-  email: String
-  firstname: String
-  lastname: String
-  phoneNumber: String
-  isActive: Boolean
-  role: RoleInfo
+  id: ID!
+  email: String!
+  firstname: String!
+  lastname: String!
+  phoneNumber: String!
+  isActive: Boolean!
+  role: RoleInfo!
 }
 
 input UserInput {
-  id: ID
-  email: String
-  firstname: String
-  lastname: String
-  phoneNumber: String
-  isActive: Boolean
-  roleIds: [ID]
+  id: ID!
+  email: String!
+  firstname: String!
+  lastname: String!
+  phoneNumber: String!
+  isActive: Boolean!
+  roleIds: [ID]!
 }
 
 # -------------------------------------------------
 
 type RoleInfo {
-  id: ID
-  name: String
+  id: ID!
+  name: String!
 }
 
 # -------------------------------------------------
 
 type ConversationInfo {
-  id: ID
-  wsTopic: String
-  user: UserInfo
-  status: String
+  id: ID!
+  wsTopic: String!
+  user: UserInfo!
+  status: String!
 }
 
 input ConversationInput {
-  userId: ID
+  userId: ID!
 }
 
 # -------------------------------------------------
 
 type MessageInfo {
-  id: ID
-  content: String
-  user: UserInfo
-  conversation: ConversationInfo
-  status: String
+  id: ID!
+  content: String!
+  user: UserInfo!
+  conversation: ConversationInfo!
+  status: String!
 }
 
 input MessageInput {
-  content: String
-  userId: ID
-  conversationId: ID
+  content: String!
+  userId: ID!
+  conversationId: ID!
 }

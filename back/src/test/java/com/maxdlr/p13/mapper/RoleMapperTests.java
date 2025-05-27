@@ -8,18 +8,22 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mapstruct.factory.Mappers;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.maxdlr.p13.TestUtils;
 import com.maxdlr.p13.dto.RoleRecordInfo;
 import com.maxdlr.p13.entity.RoleEntity;
 
+@ExtendWith(MockitoExtension.class)
 public class RoleMapperTests {
 
   RoleMapper roleMapper;
 
   @BeforeEach
   public void setUp() {
-    this.roleMapper = new RoleMapperImpl();
+    this.roleMapper = Mappers.getMapper(RoleMapper.class);
   }
 
   @Test

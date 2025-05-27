@@ -15,6 +15,7 @@ import com.maxdlr.p13.exception.ConversationNotFoundException;
 import com.maxdlr.p13.exception.ConversationUserNotFoundException;
 import com.maxdlr.p13.mapper.ConversationMapper;
 import com.maxdlr.p13.repository.UserRepository;
+import com.maxdlr.p13.value_object.TopicName;
 import com.maxdlr.p13.repository.ConversationRepository;
 
 @Service
@@ -33,8 +34,13 @@ public class ConversationService {
     this.conversationMapper = conversationMapper;
   }
 
-  @Transactional
+  // @Transactional
   public ConversationEntity openConversation(ConversationRecordInput conversationInput) {
+
+    if (conversationInput == null) {
+      throw new ConversationNotFoundException("ConversationInput is null");
+    }
+
     UserEntity user = this.userRepository
         .findOneById(conversationInput
             .getUserId())
@@ -42,7 +48,7 @@ public class ConversationService {
             "Cannot find conversation user of id : " + conversationInput.getUserId()));
 
     ConversationEntity conversation = new ConversationEntity()
-        .setWsTopic(this.generateTopicName(user))
+        .setWsTopic(new TopicName(user).get())
         .setUser(user)
         .setStatus(ConversationStatusEnum.OPEN);
     conversation = this.conversationRepository.save(conversation);
@@ -66,9 +72,4 @@ public class ConversationService {
         .orElseThrow(() -> new ConversationNotFoundException("Cannot find conversation with id: " + id));
     return this.conversationMapper.toRecordInfo(conversation);
   }
-
-  private String generateTopicName(UserEntity user) {
-    return UUID.randomUUID().toString() + "-" + user.getEmail();
-  }
-
 }

@@ -8,6 +8,10 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mapstruct.factory.Mappers;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.ContextConfiguration;
 
 import com.maxdlr.p13.TestUtils;
 import com.maxdlr.p13.dto.ConversationRecordInfo;
@@ -16,13 +20,14 @@ import com.maxdlr.p13.entity.RoleEntity;
 import com.maxdlr.p13.entity.UserEntity;
 import com.maxdlr.p13.enums.ConversationStatusEnum;
 
+@ExtendWith(MockitoExtension.class)
 public class ConversationMapperTests {
 
   ConversationMapper conversationMapper;
 
   @BeforeEach
   public void setUp() {
-    this.conversationMapper = new ConversationMapperImpl();
+    this.conversationMapper = Mappers.getMapper(ConversationMapper.class);
   }
 
   @Test

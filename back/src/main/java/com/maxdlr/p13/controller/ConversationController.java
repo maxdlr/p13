@@ -17,11 +17,11 @@ import com.maxdlr.p13.service.ConversationService;
 public class ConversationController {
 
   ConversationService conversationService;
-  ConversationMapper ConversationMapper;
+  ConversationMapper conversationMapper;
 
   public ConversationController(ConversationService conversationService, ConversationMapper conversationMapper) {
     this.conversationService = conversationService;
-    this.ConversationMapper = conversationMapper;
+    this.conversationMapper = conversationMapper;
   }
 
   @QueryMapping
@@ -41,8 +41,11 @@ public class ConversationController {
 
   @MutationMapping
   public ConversationRecordInfo CreateConversation(@Argument ConversationRecordInput conversationInput) {
+
+    assert (conversationInput != null);
+
     ConversationEntity conversation = this.conversationService.openConversation(conversationInput);
-    return this.ConversationMapper.toRecordInfo(conversation);
+    return this.conversationMapper.toRecordInfo(conversation);
   }
 
 }

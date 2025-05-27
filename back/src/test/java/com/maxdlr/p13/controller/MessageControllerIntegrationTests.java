@@ -1,7 +1,12 @@
 package com.maxdlr.p13.controller;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +22,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.maxdlr.p13.TestUtils;
 import com.maxdlr.p13.dto.MessageRecordInfo;
+import com.maxdlr.p13.dto.MessageRecordInput;
 import com.maxdlr.p13.entity.ConversationEntity;
 import com.maxdlr.p13.entity.MessageEntity;
 import com.maxdlr.p13.entity.RoleEntity;
@@ -94,43 +100,44 @@ public class MessageControllerIntegrationTests {
     tester
         .document(
             """
-                query {
-                  GetAllMessagesOfUser(userId: 1) {
-                    id
-                    content
-                    user {
-                      id
-                      email
-                      firstname
-                      lastname
-                      phoneNumber
-                      isActive
-                      role {
+                query GetAllMessagesOfUser($userId: ID!) {
+                      GetAllMessagesOfUser(userId: $userId) {
                         id
-                        name
-                      }
-                    }
-                    conversation {
-                      id
-                      wsTopic
-                      user {
-                        id
-                        email
-                        firstname
-                        lastname
-                        phoneNumber
-                        isActive
-                        role {
+                        content
+                        user {
                           id
-                          name
+                          email
+                          firstname
+                          lastname
+                          phoneNumber
+                          isActive
+                          role {
+                            id
+                            name
+                          }
                         }
+                        conversation {
+                          id
+                          wsTopic
+                          user {
+                            id
+                            email
+                            firstname
+                            lastname
+                            phoneNumber
+                            isActive
+                            role {
+                              id
+                              name
+                            }
+                          }
+                          status
+                        }
+                        status
                       }
-                      status
                     }
-                    status
-                  }
-                }
-                """)
+                    """)
+        .variable("userId", this.testUser.getId())
         .execute()
         .path("GetAllMessagesOfUser")
         .entityList(MessageRecordInfo.class)
@@ -141,8 +148,8 @@ public class MessageControllerIntegrationTests {
   public void testGetMessage() {
     tester
         .document("""
-            query GetMessage($id: ID!) { # Declare the variable in the query
-              GetMessage(id: $id) { # Use the variable
+            query GetMessage($id: ID!) {
+              GetMessage(id: $id) {
                 id
                 content
                 user {
@@ -178,11 +185,116 @@ public class MessageControllerIntegrationTests {
               }
             }
             """)
-        .variable("id", this.savedMessagesEntities.get(0).getId())
+        .variable("id", this.savedMessagesEntities.getFirst().getId())
         .execute()
         .path("GetMessage")
         .entity(MessageRecordInfo.class)
-        .isEqualTo(this.expectedMessagesDto.get(0));
+        .isEqualTo(this.expectedMessagesDto.getFirst());
+  }
 
+  @Test
+  public void testGetAllMessagesOfConversation() {
+    tester
+        .document("""
+            query GetAllMessagesOfConversation($conversationId: ID!) {
+              GetAllMessagesOfConversation(conversationId: $conversationId) {
+                id
+                content
+                user {
+                  id
+                  email
+                  firstname
+                  lastname
+                  phoneNumber
+                  isActive
+                  role {
+                    id
+                    name
+                  }
+                }
+                conversation {
+                  id
+                  wsTopic
+                  user {
+                    id
+                    email
+                    firstname
+                    lastname
+                    phoneNumber
+                    isActive
+                    role {
+                      id
+                      name
+                    }
+                  }
+                  status
+                }
+                status
+              }
+            }
+            """)
+        .variable("conversationId", this.testConversation.getId())
+        .execute()
+        .path("GetAllMessagesOfConversation")
+        .entityList(MessageRecordInfo.class)
+        .containsExactly(this.expectedMessagesDto.toArray(new MessageRecordInfo[0]));
+  }
+
+  @Test
+  public void testCreateMessage() {
+
+    Map<String, String> testMessage = new HashMap<String, String>();
+    testMessage.put("content", "my test content");
+    testMessage.put("userId", this.testUser.getId().toString());
+    testMessage.put("conversationId", this.testConversation.getId().toString());
+
+    tester.document("""
+        mutation CreateMessage($message: MessageInput!) {
+          CreateMessage(message: $message) {
+            id
+            content
+            user {
+              id
+              email
+              firstname
+              lastname
+              phoneNumber
+              isActive
+              role {
+                id
+                name
+              }
+            }
+            conversation {
+              id
+              wsTopic
+              user {
+                id
+                email
+                firstname
+                lastname
+                phoneNumber
+                isActive
+                role {
+                  id
+                  name
+                }
+              }
+              status
+            }
+            status
+          }
+        }
+        """)
+        .variable("message", testMessage)
+        .execute()
+        .path("CreateMessage")
+        .entity(MessageRecordInfo.class)
+        .satisfies(createdMessage -> {
+          assertNotNull(createdMessage);
+          assertEquals("my test content", createdMessage.getContent());
+          assertEquals(createdMessage.getUser().getId(), this.testUser.getId());
+          assertEquals(createdMessage.getConversation().getId(), this.testConversation.getId());
+        });
   }
 }

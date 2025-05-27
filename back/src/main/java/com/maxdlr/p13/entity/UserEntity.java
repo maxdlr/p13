@@ -1,5 +1,7 @@
 package com.maxdlr.p13.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -34,6 +36,7 @@ public class UserEntity extends AbstractEntity {
   private String email;
 
   @Column(nullable = false)
+  @JsonIgnore
   private String password;
 
   @Column(nullable = false)

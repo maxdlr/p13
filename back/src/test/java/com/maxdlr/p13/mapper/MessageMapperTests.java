@@ -8,6 +8,9 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mapstruct.factory.Mappers;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.maxdlr.p13.TestUtils;
 import com.maxdlr.p13.dto.MessageRecordInfo;
@@ -18,13 +21,14 @@ import com.maxdlr.p13.entity.UserEntity;
 import com.maxdlr.p13.enums.ConversationStatusEnum;
 import com.maxdlr.p13.enums.MessageStatusEnum;
 
+@ExtendWith(MockitoExtension.class)
 public class MessageMapperTests {
 
   MessageMapper messageMapper;
 
   @BeforeEach
   public void setUp() {
-    this.messageMapper = new MessageMapperImpl();
+    this.messageMapper = Mappers.getMapper(MessageMapper.class);
   }
 
   @Test
