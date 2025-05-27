@@ -7,7 +7,7 @@
 #m for information during makefile remakes.
 MAKEFLAGS += --no-print-directory
 #MAKEFLAGS += --debug=v
-MAKEFLAGS += -s
+# MAKEFLAGS += -s
 include .env
 export $(shell sed 's/=.*//' .env)
 #default: help
@@ -20,8 +20,19 @@ pt: ## Run Posting with the project request collection
 back-run: ## Run the backend app
 	cd back && mvn clean install spring-boot:run -DskipTests
 
+# back-tests: ## Run the backend tests
+# 	cd back && mvn clean test && open target/site/jacoco/index.html
+
 back-tests: ## Run the backend tests
+ifdef class
+ifdef method
+	cd back && mvn clean test -Dtest=$(class)#$(method) && open target/site/jacoco/index.html
+else
+	cd back && mvn clean test -Dtest=$(class) && open target/site/jacoco/index.html
+endif
+else
 	cd back && mvn clean test && open target/site/jacoco/index.html
+endif
 
 back-open-tests-coverage: ## Open Jacoco tests coverage results
 	cd back && open back/target/site/jacoco/index.html

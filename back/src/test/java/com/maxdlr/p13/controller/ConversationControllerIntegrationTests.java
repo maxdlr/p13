@@ -26,6 +26,7 @@ import com.maxdlr.p13.entity.ConversationEntity;
 import com.maxdlr.p13.entity.RoleEntity;
 import com.maxdlr.p13.entity.UserEntity;
 import com.maxdlr.p13.enums.ConversationStatusEnum;
+import com.maxdlr.p13.exception.ConversationNotFoundException;
 import com.maxdlr.p13.mapper.ConversationMapper;
 import com.maxdlr.p13.mapper.MessageMapper;
 import com.maxdlr.p13.mapper.UserMapper;
@@ -182,8 +183,6 @@ public class ConversationControllerIntegrationTests {
     Map<String, String> testConversation = new HashMap<>();
     testConversation.put("userId", this.testUser.getId().toString());
 
-    System.out.println(testConversation + "monmarkercaca");
-
     tester.document("""
         mutation CreateConversation($conversation: ConversationInput!) {
           CreateConversation(conversation: $conversation) {
@@ -207,13 +206,64 @@ public class ConversationControllerIntegrationTests {
         """)
         .variable("conversation", testConversation)
         .execute()
-        .path("CreateConversation")
-        .entity(ConversationRecordInfo.class);
-    // .satisfies(createdConv -> {
-    // assertNotNull(createdConv);
-    // assertEquals(createdConv.getUser().getId(), this.testUser.getId());
-    // assertEquals(createdConv.getStatus(),
-    // ConversationStatusEnum.OPEN.toString());
-    // });
+        .path("CreateConversation").hasValue()
+        .entity(ConversationRecordInfo.class)
+        .satisfies(createdConv -> {
+          assertNotNull(createdConv);
+          assertEquals(createdConv.getUser().getId(), this.testUser.getId());
+          assertEquals(createdConv.getStatus(),
+              ConversationStatusEnum.OPEN.toString());
+        });
+    ;
+  }
+
+  @Test
+  public void testCreateConversation_ThrowsConversationNotFoundException() {
+    Map<String, String> testConversationInput = new HashMap<>();
+    testConversationInput.put("userId", "999");
+
+    tester.document("""
+        mutation CreateConversation($conversation: ConversationInput!) {
+          CreateConversation(conversation: $conversation) {
+            id
+            wsTopic
+            user {
+              id
+              email
+              firstname
+              lastname
+              phoneNumber
+              isActive
+              role {
+                id
+                name
+              }
+            }
+            status
+          }
+        }
+        """)
+        .variable("conversation", testConversationInput)
+        .execute()
+        .errors()
+        .expect(error -> error.getMessage().contains("Cannot find conversation user of id : 999"))
+        .verify();
+  }
+
+  @Test
+  public void testGetConversation_ThrowsConversationNotFoundException() {
+    tester.document("""
+        query GetConversation($id: ID!) {
+        GetConversation(id: $id) {
+        id
+        wsTopic
+        }
+        }
+        """)
+        .variable("id", 123)
+        .execute()
+        .errors()
+        .expect(error -> error.getMessage().contains("Cannot find conversation with id: 123"))
+        .verify();
   }
 }

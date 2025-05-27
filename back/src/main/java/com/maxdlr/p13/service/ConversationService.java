@@ -37,11 +37,6 @@ public class ConversationService {
   @Transactional
   public ConversationEntity openConversation(ConversationRecordInput conversationInput) {
 
-    System.out.println("Entering service with" + conversationInput.toString());
-    if (conversationInput == null) {
-      throw new ConversationNotFoundException("ConversationInput is null");
-    }
-
     UserEntity user = this.userRepository
         .findOneById(conversationInput
             .getUserId())

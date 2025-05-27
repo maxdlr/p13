@@ -41,7 +41,6 @@ public class ConversationController {
 
   @MutationMapping
   public ConversationRecordInfo CreateConversation(@Argument ConversationRecordInput conversation) {
-    System.out.println("Entering controller with" + conversation.toString());
     ConversationEntity conversationEntity = this.conversationService.openConversation(conversation);
     return this.conversationMapper.toRecordInfo(conversationEntity);
   }
