@@ -34,9 +34,10 @@ public class ConversationService {
     this.conversationMapper = conversationMapper;
   }
 
-  // @Transactional
+  @Transactional
   public ConversationEntity openConversation(ConversationRecordInput conversationInput) {
 
+    System.out.println("Entering service with" + conversationInput.toString());
     if (conversationInput == null) {
       throw new ConversationNotFoundException("ConversationInput is null");
     }

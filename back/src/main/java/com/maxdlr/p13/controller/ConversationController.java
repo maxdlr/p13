@@ -40,9 +40,9 @@ public class ConversationController {
   }
 
   @MutationMapping
-  public ConversationRecordInfo CreateConversation(@Argument ConversationRecordInput conversationInput) {
-    ConversationEntity conversation = this.conversationService.openConversation(conversationInput);
-    return this.conversationMapper.toRecordInfo(conversation);
+  public ConversationRecordInfo CreateConversation(@Argument ConversationRecordInput conversation) {
+    System.out.println("Entering controller with" + conversation.toString());
+    ConversationEntity conversationEntity = this.conversationService.openConversation(conversation);
+    return this.conversationMapper.toRecordInfo(conversationEntity);
   }
-
 }

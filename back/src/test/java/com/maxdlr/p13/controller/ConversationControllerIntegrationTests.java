@@ -177,43 +177,43 @@ public class ConversationControllerIntegrationTests {
         .containsExactly(this.expectedConversations.toArray(new ConversationRecordInfo[0]));
   }
 
-  // @Test
-  // public void testCreateConversation() {
-  // Map<String, String> testConversation = new HashMap<>();
-  // testConversation.put("userId", this.testUser.getId().toString());
-  //
-  // System.out.println(testConversation + "monmarkercaca");
-  //
-  // tester.document("""
-  // mutation CreateConversation($conversation: ConversationInput!) {
-  // CreateConversation(conversation: $conversation) {
-  // id
-  // wsTopic
-  // user {
-  // id
-  // email
-  // firstname
-  // lastname
-  // phoneNumber
-  // isActive
-  // role {
-  // id
-  // name
-  // }
-  // }
-  // status
-  // }
-  // }
-  // """)
-  // .variable("conversation", testConversation)
-  // .execute()
-  // .path("CreateConversation")
-  // .entity(ConversationRecordInfo.class);
-  // // .satisfies(createdConv -> {
-  // // assertNotNull(createdConv);
-  // // assertEquals(createdConv.getUser().getId(), this.testUser.getId());
-  // // assertEquals(createdConv.getStatus(),
-  // // ConversationStatusEnum.OPEN.toString());
-  // // });
-  // }
+  @Test
+  public void testCreateConversation() {
+    Map<String, String> testConversation = new HashMap<>();
+    testConversation.put("userId", this.testUser.getId().toString());
+
+    System.out.println(testConversation + "monmarkercaca");
+
+    tester.document("""
+        mutation CreateConversation($conversation: ConversationInput!) {
+          CreateConversation(conversation: $conversation) {
+            id
+            wsTopic
+            user {
+              id
+              email
+              firstname
+              lastname
+              phoneNumber
+              isActive
+              role {
+                id
+                name
+              }
+            }
+            status
+          }
+        }
+        """)
+        .variable("conversation", testConversation)
+        .execute()
+        .path("CreateConversation")
+        .entity(ConversationRecordInfo.class);
+    // .satisfies(createdConv -> {
+    // assertNotNull(createdConv);
+    // assertEquals(createdConv.getUser().getId(), this.testUser.getId());
+    // assertEquals(createdConv.getStatus(),
+    // ConversationStatusEnum.OPEN.toString());
+    // });
+  }
 }

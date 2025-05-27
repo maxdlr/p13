@@ -40,7 +40,6 @@ public class UserControllerIntegrationTests {
   @Autowired
   ConversationRepository conversationRepository;
 
-  private UserEntity testUser;
   private ConversationEntity testConversation;
 
   private List<UserRecordInfo> expectedUsers;
@@ -49,7 +48,6 @@ public class UserControllerIntegrationTests {
   @BeforeEach
   public void setUp() {
     this.conversationRepository.deleteAll();
-
     this.userRepository.deleteAll();
 
     UserEntity user1 = TestUtils.makeUserEntity(TestUtils.makeRoleEntityAsUser());

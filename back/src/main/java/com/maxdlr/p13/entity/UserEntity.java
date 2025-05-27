@@ -51,6 +51,6 @@ public class UserEntity extends AbstractEntity {
   @Column(nullable = false)
   private Boolean isActive;
 
-  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @ManyToOne(cascade = CascadeType.ALL)
   private RoleEntity role;
 }
