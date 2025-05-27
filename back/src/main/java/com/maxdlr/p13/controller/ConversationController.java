@@ -41,9 +41,6 @@ public class ConversationController {
 
   @MutationMapping
   public ConversationRecordInfo CreateConversation(@Argument ConversationRecordInput conversationInput) {
-
-    assert (conversationInput != null);
-
     ConversationEntity conversation = this.conversationService.openConversation(conversationInput);
     return this.conversationMapper.toRecordInfo(conversation);
   }
