@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.maxdlr.p13.dto.UserRecordInfo;
 import com.maxdlr.p13.entity.ConversationEntity;
 import com.maxdlr.p13.entity.UserEntity;
-import com.maxdlr.p13.exception.ConversationNotFoundException;
+import com.maxdlr.p13.exception.UserConversationNotFoundException;
 import com.maxdlr.p13.exception.UserNotFoundException;
 import com.maxdlr.p13.mapper.UserMapper;
 import com.maxdlr.p13.repository.ConversationRepository;
@@ -44,7 +44,8 @@ public class UserService {
   @Transactional(readOnly = true)
   public UserRecordInfo findByConversation(Integer conversationId) {
     ConversationEntity conversation = this.conversationRepository.findOneById(conversationId)
-        .orElseThrow(() -> new ConversationNotFoundException(("Cannot find conversation with id: " + conversationId)));
+        .orElseThrow(
+            () -> new UserConversationNotFoundException(("Cannot find user conversation with id: " + conversationId)));
 
     return this.userMapper.toRecordInfo(conversation.getUser());
   }

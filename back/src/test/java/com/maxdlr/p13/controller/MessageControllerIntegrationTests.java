@@ -297,4 +297,209 @@ public class MessageControllerIntegrationTests {
           assertEquals(createdMessage.getConversation().getId(), this.testConversation.getId());
         });
   }
+
+  @Test
+  public void testCreateMessage_MessageUserNotFoundException() {
+    Map<String, String> testMessage = new HashMap<String, String>();
+    testMessage.put("content", "my test content");
+    testMessage.put("userId", "999");
+    testMessage.put("conversationId", this.testConversation.getId().toString());
+
+    tester.document("""
+        mutation CreateMessage($message: MessageInput!) {
+          CreateMessage(message: $message) {
+            id
+            content
+            user {
+              id
+              email
+              firstname
+              lastname
+              phoneNumber
+              isActive
+              role {
+                id
+                name
+              }
+            }
+            conversation {
+              id
+              wsTopic
+              user {
+                id
+                email
+                firstname
+                lastname
+                phoneNumber
+                isActive
+                role {
+                  id
+                  name
+                }
+              }
+              status
+            }
+            status
+          }
+        }
+        """)
+        .variable("message", testMessage)
+        .execute()
+        .errors()
+        .expect(error -> error.getMessage().contains("Cannot find message user with id: 999"));
+  }
+
+  @Test
+  public void testCreateMessage_MessageConversationNotFoundException() {
+    Map<String, String> testMessage = new HashMap<String, String>();
+    testMessage.put("content", "my test content");
+    testMessage.put("userId", this.testUser.getId().toString());
+    testMessage.put("conversationId", "999");
+
+    tester.document("""
+        mutation CreateMessage($message: MessageInput!) {
+          CreateMessage(message: $message) {
+            id
+            content
+            user {
+              id
+              email
+              firstname
+              lastname
+              phoneNumber
+              isActive
+              role {
+                id
+                name
+              }
+            }
+            conversation {
+              id
+              wsTopic
+              user {
+                id
+                email
+                firstname
+                lastname
+                phoneNumber
+                isActive
+                role {
+                  id
+                  name
+                }
+              }
+              status
+            }
+            status
+          }
+        }
+        """)
+        .variable("message", testMessage)
+        .execute()
+        .errors()
+        .expect(error -> error.getMessage().contains("Cannot find message conversation with id: 999"));
+  }
+
+  @Test
+  public void testCreateMessage_WithNullConversationId() {
+    Map<String, String> testMessage = new HashMap<String, String>();
+    testMessage.put("content", "my test content");
+    testMessage.put("userId", this.testUser.getId().toString());
+    // testMessage.put("conversationId", "caca");
+
+    tester.document("""
+        mutation CreateMessage($message: MessageInput!) {
+          CreateMessage(message: $message) {
+            id
+            content
+            user {
+              id
+              email
+              firstname
+              lastname
+              phoneNumber
+              isActive
+              role {
+                id
+                name
+              }
+            }
+            conversation {
+              id
+              wsTopic
+              user {
+                id
+                email
+                firstname
+                lastname
+                phoneNumber
+                isActive
+                role {
+                  id
+                  name
+                }
+              }
+              status
+            }
+            status
+          }
+        }
+        """)
+        .variable("message", testMessage)
+        .execute()
+        .path("CreateMessage")
+        .entity(MessageRecordInfo.class)
+        .satisfies(createdMessage -> {
+          assertNotNull(createdMessage);
+          assertEquals("my test content", createdMessage.getContent());
+          assertEquals(createdMessage.getUser().getId(), this.testUser.getId());
+        });
+  }
+
+  @Test
+  public void testGetMessage_MessageNotFoundException() {
+    tester
+        .document("""
+            query GetMessage($id: ID!) {
+              GetMessage(id: $id) {
+                id
+                content
+                user {
+                  id
+                  email
+                  firstname
+                  lastname
+                  phoneNumber
+                  isActive
+                  role {
+                    id
+                    name
+                  }
+                }
+                conversation {
+                  id
+                  wsTopic
+                  user {
+                    id
+                    email
+                    firstname
+                    lastname
+                    phoneNumber
+                    isActive
+                    role {
+                      id
+                      name
+                    }
+                  }
+                  status
+                }
+                status
+              }
+            }
+            """)
+        .variable("id", "999")
+        .execute()
+        .errors()
+        .expect(error -> error.getMessage().contains("Cannot find message with id: 999"));
+  }
 }

@@ -47,7 +47,7 @@ public class MessageService {
   public MessageRecordInfo push(final MessageRecordInput messageInput, final MessageStatusEnum status) {
     UserEntity user = this.userRepository.findOneById(messageInput.getUserId())
         .orElseThrow(() -> new MessageUserNotFoundException(
-            "Cannot user associated with user with id: " + messageInput.getUserId()));
+            "Cannot find message user with id: " + messageInput.getUserId()));
 
     ConversationEntity conversation = null;
 
@@ -57,7 +57,7 @@ public class MessageService {
       conversation = this.conversationRepository
           .findOneById(messageInput.getConversationId())
           .orElseThrow(() -> new ConversationNotFoundException(
-              "Cannot find conversation with id: " + messageInput.getConversationId()));
+              "Cannot find message conversation with id: " + messageInput.getConversationId()));
     }
 
     conversation = this.conversationRepository.save(conversation);

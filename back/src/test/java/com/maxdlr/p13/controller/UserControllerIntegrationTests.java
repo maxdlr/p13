@@ -142,4 +142,53 @@ public class UserControllerIntegrationTests {
         .isEqualTo(this.expectedUsers.getFirst());
   }
 
+  @Test
+  public void testGetUser_UserNotFoundException() {
+    tester
+        .document(
+            """
+                query GetUser($id: ID!) {
+                      GetUser(id: $id) {
+                          id
+                          email
+                          firstname
+                          lastname
+                          phoneNumber
+                          isActive
+                          role {
+                            id
+                            name
+                          }
+                      }
+                    }
+                    """)
+        .variable("id", "999")
+        .execute()
+        .errors().expect(error -> error.getMessage().contains("Cannot find user with id: 999"));
+  }
+
+  @Test
+  public void testGetUser_UserConversationNotFoundException() {
+    tester
+        .document(
+            """
+                query GetUserOfConversation($conversationId: ID!) {
+                      GetUserOfConversation(conversationId: $conversationId) {
+                          id
+                          email
+                          firstname
+                          lastname
+                          phoneNumber
+                          isActive
+                          role {
+                            id
+                            name
+                          }
+                      }
+                    }
+                    """)
+        .variable("conversationId", "999")
+        .execute()
+        .errors().expect(error -> error.getMessage().contains("Cannot find user conversation with id: 999"));
+  }
 }

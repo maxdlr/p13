@@ -1,5 +1,6 @@
 package com.maxdlr.p13.exception;
 
+import java.net.BindException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,28 +25,18 @@ public class GraphQLExceptionResolver extends DataFetcherExceptionResolverAdapte
 
     return switch (ex) {
       case MessageUserNotFoundException e -> createNotFoundError(e, env);
-      case ConversationUserNotFoundException e -> createNotFoundError(e, env);
       case MessageNotFoundException e -> createNotFoundError(e, env);
+      case ConversationUserNotFoundException e -> createNotFoundError(e, env);
       case ConversationNotFoundException e -> createNotFoundError(e, env);
+      case UserNotFoundException e -> createNotFoundError(e, env);
+      case UserConversationNotFoundException e -> createNotFoundError(e, env);
+      case BindException e -> createBadArgumentError(e, env);
       default -> {
         logger.error("Unexpected error in GraphQL resolver", ex);
         yield createInternalError(ex, env);
       }
     };
   }
-  // protected GraphQLError resolveToSingleError(Throwable ex,
-  // DataFetchingEnvironment env) {
-  // if (ex instanceof VehicleNotFoundException) {
-  // return GraphqlErrorBuilder.newError()
-  // .errorType(ErrorType.NOT_FOUND)
-  // .message(ex.getMessage())
-  // .path(env.getExecutionStepInfo().getPath())
-  // .location(env.getField().getSourceLocation())
-  // .build();
-  // } else {
-  // return null;
-  // }
-  // }
 
   private GraphQLError createNotFoundError(Exception ex, DataFetchingEnvironment env) {
     Map<String, Object> extensions = new HashMap<>();
@@ -54,6 +45,19 @@ public class GraphQLExceptionResolver extends DataFetcherExceptionResolverAdapte
     return GraphqlErrorBuilder.newError()
         .message(ex.getMessage())
         .errorType(ErrorType.NOT_FOUND)
+        .path(env.getExecutionStepInfo().getPath())
+        .location(env.getField().getSourceLocation())
+        .extensions(extensions)
+        .build();
+  }
+
+  private GraphQLError createBadArgumentError(Exception ex, DataFetchingEnvironment env) {
+    Map<String, Object> extensions = new HashMap<>();
+    extensions.put("exceptionType", ex.getClass().getSimpleName());
+    extensions.put("timestamp", System.currentTimeMillis());
+    return GraphqlErrorBuilder.newError()
+        .message(ex.getMessage())
+        .errorType(ErrorType.BAD_REQUEST)
         .path(env.getExecutionStepInfo().getPath())
         .location(env.getField().getSourceLocation())
         .extensions(extensions)
