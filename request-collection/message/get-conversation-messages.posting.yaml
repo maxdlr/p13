@@ -1,0 +1,13 @@
+name: get conversation messages
+description: ""
+method: POST
+url: http://localhost:8080/graphql
+body:
+  content: |-
+    {
+      "query": "query GetAllMessagesOfConversation { GetAllMessagesOfConversation(conversationId: 1) { id content }}"
+    }
+  content_type: application/json
+headers:
+- name: content-type
+  value: application/json

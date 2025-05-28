@@ -1,0 +1,12 @@
+name: get all conversations
+method: POST
+url: http://localhost:8080/graphql
+body:
+  content: |-
+    {
+      "query": "query GetAllConversations { GetAllConversations { id wsTopic } }"
+    }
+  content_type: application/json
+headers:
+- name: content-type
+  value: application/json

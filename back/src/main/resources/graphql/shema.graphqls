@@ -1,0 +1,77 @@
+type Query {
+  GetUser(id: ID): UserInfo!
+  GetAllUsers: [UserInfo]!
+  GetUserOfConversation(conversationId: ID): UserInfo!
+
+  GetMessage(id: ID): MessageInfo!
+  GetAllMessagesOfConversation(conversationId: ID): [MessageInfo]!
+  GetAllMessagesOfUser(userId: ID): [MessageInfo]!
+
+  GetAllConversationsOfUser(userId: ID): [ConversationInfo]!
+  GetAllConversations: [ConversationInfo]!
+  GetConversation(id: ID): ConversationInfo!
+}
+
+type Mutation {
+  CreateUser(user: UserInput!): UserInfo!
+
+  CreateConversation(conversation: ConversationInput!): ConversationInfo!
+
+  CreateMessage(message: MessageInput!): MessageInfo!
+}
+
+type UserInfo {
+  id: ID!
+  email: String!
+  firstname: String!
+  lastname: String!
+  phoneNumber: String!
+  isActive: Boolean!
+  role: RoleInfo!
+}
+
+input UserInput {
+  id: ID!
+  email: String!
+  firstname: String!
+  lastname: String!
+  phoneNumber: String!
+  isActive: Boolean!
+  roleIds: [ID]!
+}
+
+# -------------------------------------------------
+
+type RoleInfo {
+  id: ID!
+  name: String!
+}
+
+# -------------------------------------------------
+
+type ConversationInfo {
+  id: ID!
+  wsTopic: String!
+  user: UserInfo!
+  status: String!
+}
+
+input ConversationInput {
+  userId: ID!
+}
+
+# -------------------------------------------------
+
+type MessageInfo {
+  id: ID!
+  content: String!
+  user: UserInfo!
+  conversation: ConversationInfo!
+  status: String!
+}
+
+input MessageInput {
+  content: String!
+  userId: ID
+  conversationId: ID
+}
