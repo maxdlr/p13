@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.maxdlr.p13.entity.ConversationEntity;
 import com.maxdlr.p13.entity.RoleEntity;
 import com.maxdlr.p13.entity.UserEntity;
 import com.maxdlr.p13.enums.RoleEnum;
@@ -27,8 +28,8 @@ public class FixturesController {
     RoleEntity userRole = new RoleEntity().setName(RoleEnum.USER);
     RoleEntity adminRole = new RoleEntity().setName(RoleEnum.ADMIN);
 
-    userRole = this.roleRepository.save  (userRole);
-    adminRole = this.roleRepository.save  (adminRole);
+    userRole = this.roleRepository.save(userRole);
+    adminRole = this.roleRepository.save(adminRole);
 
     UserEntity user = new UserEntity()
         .setEmail("max@max.com")
@@ -39,6 +40,6 @@ public class FixturesController {
         .setIsActive(true)
         .setRole(userRole);
 
-    this.userRepository.save  (user);
+    this.userRepository.save(user);
   }
 }

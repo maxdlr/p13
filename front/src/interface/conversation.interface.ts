@@ -1,3 +1,4 @@
+import { MessageInfo } from './message.interface';
 import { UserInfo } from './user.interface';
 
 export enum ConversationStatusEnum {
@@ -18,4 +19,9 @@ export interface ConversationInfo {
 
 export interface ConversationInput {
   userId: number;
+}
+
+export interface ConversationAndMessages {
+  GetConversation: ConversationInfo;
+  GetAllMessagesOfConversation: MessageInfo[];
 }

@@ -1,4 +1,7 @@
-import { ConversationInfo } from './conversation.interface';
+import {
+  ConversationAndMessages,
+  ConversationInfo,
+} from './conversation.interface';
 import { UserInfo } from './user.interface';
 
 export interface GetUserResponse {
@@ -13,6 +16,18 @@ export interface GetUserOfConversationResponse {
   GetUserOfConversation: UserInfo[];
 }
 
+export interface GetConversationResponse {
+  GetConversation: ConversationInfo;
+}
+
 export interface CreateConversationResponse {
   CreateConversation: ConversationInfo;
+}
+
+export interface GetAllConversationsOfUserResponse {
+  GetAllConversationsOfUser: ConversationInfo[];
+}
+
+export interface GetConversationAndMessages {
+  GetConversationAndMessages: ConversationAndMessages;
 }
