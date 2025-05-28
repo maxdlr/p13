@@ -1,5 +1,7 @@
 package com.maxdlr.p13.controller;
 
+import java.util.Arrays;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,6 +42,15 @@ public class FixturesController {
         .setIsActive(true)
         .setRole(userRole);
 
-    this.userRepository.save(user);
+    UserEntity admin = new UserEntity()
+        .setEmail("admin@support.com")
+        .setFirstname("client")
+        .setLastname("support")
+        .setPassword("password")
+        .setPhoneNumber("0123456789")
+        .setIsActive(true)
+        .setRole(adminRole);
+
+    this.userRepository.saveAll(Arrays.asList(user, admin));
   }
 }

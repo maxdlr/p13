@@ -49,10 +49,11 @@ public class MessageController {
     MessageRecordInfo createdMessage = this.messageService.push(message, MessageStatusEnum.SENT);
     Map<String, Object> headers = new HashMap<>();
 
-    this.wsService.send(
+    this.wsService.<MessageRecordInfo>send(
         headers,
         createdMessage.getConversation().getWsTopic(),
         createdMessage);
+
     return createdMessage;
   }
 }

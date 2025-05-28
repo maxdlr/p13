@@ -11,8 +11,8 @@ export class WsService extends RxStomp {
     super();
   }
 
-  // public to(topicName: WsTopicNameEnum) {
-  //   this.buildEndpoints(topicName);
+  // public to(topic: string) {
+  //   this.buildEndpoints(topic);
   //   return {
   //     save: this.save,
   //     delete: this.delete,
@@ -21,8 +21,8 @@ export class WsService extends RxStomp {
   //   };
   // }
   //
-  // private watch$(): Observable<IMessage> {
-  //   return this.watch(this.endPoints.watch);
+  // public watch$(topic: string): Observable<IMessage> {
+  //   return this.watch(topic);
   // }
   //
   // private add<P extends ModelData>(payload: P): void {

@@ -17,6 +17,9 @@ import { CREATE_CONVERSATION } from '../../gql-requests/CreateConversation';
 import { GET_ALL_CONVERSATIONS_OF_USER } from '../../gql-requests/GetAllConversationsOfUser';
 import { GET_CONVERSATION_AND_MESSAGES } from '../../gql-requests/GetConversationAndMessages';
 import { MessageInfo } from '../../interface/message.interface';
+import { WsService } from '../../service/WebSockets/ws.service';
+import { IMessage } from '@stomp/stompjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-conversation',
@@ -26,14 +29,22 @@ import { MessageInfo } from '../../interface/message.interface';
   styleUrl: './conversation.component.sass',
 })
 export class ConversationComponent {
-  loading = true;
-  error: any;
-  currentConversation: ConversationInfo | null = null;
-  currentMessages: MessageInfo[] = [];
-  conversations: ConversationInfo[] = [];
-  apollo: Apollo = inject(Apollo);
+  public currentConversation: ConversationInfo | null = null;
+  public currentMessages: MessageInfo[] = [];
+  public conversations: ConversationInfo[] = [];
+  public apollo: Apollo = inject(Apollo);
+
+  private topic: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  private currentTopic$: Observable<string> = this.topic.asObservable();
+
+  private wsService: WsService = inject(WsService);
 
   ngOnInit(): void {
+    this.getAllConversations();
+    this.listen();
+  }
+
+  private getAllConversations() {
     LoggerService.info('getting all conversations of user 1');
     this.apollo
       .query<GetAllConversationsOfUserResponse>({
@@ -45,8 +56,6 @@ export class ConversationComponent {
       .subscribe(
         (result: MutationResult<GetAllConversationsOfUserResponse>) => {
           this.conversations = result.data?.GetAllConversationsOfUser || [];
-          // this.loading = result.loading;
-          // this.error = result.error;
         },
       );
   }
@@ -61,8 +70,9 @@ export class ConversationComponent {
       .subscribe((result) => {
         this.currentConversation = result.data?.GetConversation || null;
         this.currentMessages = result.data?.GetAllMessagesOfConversation || [];
-        // this.loading = result.loading;
-        // this.error = result.error;
+        this.startConversationSession(
+          this.currentConversation?.wsTopic as string,
+        );
       });
   }
 
@@ -79,8 +89,19 @@ export class ConversationComponent {
       })
       .subscribe((result: MutationResult<CreateConversationResponse>) => {
         this.currentConversation = result.data?.CreateConversation || null;
-        // this.loading = result.loading;
-        // this.error = result.error;
       });
+  }
+
+  private listen() {
+    this.currentTopic$.subscribe((topic: string) => {
+      LoggerService.info('listening to ' + topic);
+      this.wsService.watch(topic).subscribe((response: IMessage) => {
+        LoggerService.info('subscribed');
+      });
+    });
+  }
+
+  private startConversationSession(topic: string) {
+    this.topic.next('/topic/' + topic);
   }
 }

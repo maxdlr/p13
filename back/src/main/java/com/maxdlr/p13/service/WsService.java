@@ -18,11 +18,21 @@ public class WsService {
     this.messagingTemplate = messagingTemplate;
   }
 
-  public void send(Map<String, Object> headers, String topic, Object response) {
+  public <RecordType> void send(Map<String, Object> headers, String topic, RecordType response) {
     SimpMessageHeaderAccessor headerAccessor = this.buildHeaders(headers);
-    Message<Object> wsMessage = this.buildMessage(headerAccessor, response);
+    Message<RecordType> wsMessage = this.buildMessage(headerAccessor, response);
+
+    System.out.println(String.format("""
+        --------------------------------- SENDING MESSAGE ---------------------------------
+        headers: %s,
+        topic: %s,
+        response: %s
+        -----------------------------------------------------------------------------------
+              """, headers.toString(), topic, response.toString()));
 
     this.messagingTemplate.convertAndSend(topic, wsMessage);
+
+    System.out.println("--------------------------------- MESSAGE SENT ---------------------------------");
   }
 
   private SimpMessageHeaderAccessor buildHeaders(Map<String, Object> headers) {
@@ -31,7 +41,8 @@ public class WsService {
     return headerAccessor;
   }
 
-  private Message<Object> buildMessage(SimpMessageHeaderAccessor headerAccessor, final Object payload) {
+  private <RecordType> Message<RecordType> buildMessage(SimpMessageHeaderAccessor headerAccessor,
+      final RecordType payload) {
     return MessageBuilder.withPayload(payload)
         .setHeaders(headerAccessor)
         .build();

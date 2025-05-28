@@ -44,7 +44,7 @@ public class ConversationService {
             "Cannot find conversation user of id : " + conversationInput.getUserId()));
 
     ConversationEntity conversation = new ConversationEntity()
-        .setWsTopic(new TopicName(user).get())
+        .setWsTopic(TopicName.generate(user))
         .setUser(user)
         .setStatus(ConversationStatusEnum.OPEN);
     conversation = this.conversationRepository.save(conversation);

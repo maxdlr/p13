@@ -92,7 +92,7 @@ public class TestUtils {
   public static ConversationEntity makeConversationEntity(UserEntity user,
       ConversationStatusEnum status) {
     return new ConversationEntity()
-        .setWsTopic(new TopicName(user).get())
+        .setWsTopic(TopicName.generate(user))
         .setUser(user)
         .setStatus(status);
   }
