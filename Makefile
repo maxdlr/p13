@@ -39,7 +39,7 @@ back-open-tests-coverage: ## Open Jacoco tests coverage results
 
 front-run: ## run the frontend app
 	export SERVER_ADDRESS="${address}"
-	cd front && yarn install && ng serve --host 0.0.0.0
+	cd front && npm install && ng serve --host 0.0.0.0
 
 run: ## Run all services
 	make -j2 back-run front-run
