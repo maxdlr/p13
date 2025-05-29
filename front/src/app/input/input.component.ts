@@ -5,6 +5,7 @@ import { CREATE_MESSAGE } from '../../gql-requests/CreateMessage';
 import { MessageInput } from '../../interface/message.interface';
 import { CreateMessageResponse } from '../../interface/responses.interface';
 import { ConversationInfo } from '../../interface/conversation.interface';
+import { LoggerService } from '../../service/logger.service';
 
 @Component({
   selector: 'app-input',
@@ -33,6 +34,9 @@ export class InputComponent {
           message,
         },
       })
-      .subscribe(() => this.messageControl.setValue(''));
+      .subscribe(() => {
+        LoggerService.info('sending');
+        this.messageControl.setValue('');
+      });
   }
 }
