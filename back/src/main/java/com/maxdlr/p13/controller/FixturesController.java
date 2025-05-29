@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.maxdlr.p13.entity.ConversationEntity;
 import com.maxdlr.p13.entity.RoleEntity;
 import com.maxdlr.p13.entity.UserEntity;
+import com.maxdlr.p13.enums.ConversationStatusEnum;
 import com.maxdlr.p13.enums.RoleEnum;
+import com.maxdlr.p13.repository.ConversationRepository;
 import com.maxdlr.p13.repository.RoleRepository;
 import com.maxdlr.p13.repository.UserRepository;
 
@@ -19,10 +21,13 @@ public class FixturesController {
 
   private RoleRepository roleRepository;
   private UserRepository userRepository;
+  private ConversationRepository conversationRepository;
 
-  public FixturesController(RoleRepository roleRepository, UserRepository userRepository) {
+  public FixturesController(RoleRepository roleRepository, UserRepository userRepository,
+      ConversationRepository conversationRepository) {
     this.roleRepository = roleRepository;
     this.userRepository = userRepository;
+    this.conversationRepository = conversationRepository;
   }
 
   @GetMapping("/load")
@@ -30,8 +35,7 @@ public class FixturesController {
     RoleEntity userRole = new RoleEntity().setName(RoleEnum.USER);
     RoleEntity adminRole = new RoleEntity().setName(RoleEnum.ADMIN);
 
-    userRole = this.roleRepository.save(userRole);
-    adminRole = this.roleRepository.save(adminRole);
+    this.roleRepository.saveAll(Arrays.asList(userRole, adminRole));
 
     UserEntity user = new UserEntity()
         .setEmail("max@max.com")
@@ -51,6 +55,10 @@ public class FixturesController {
         .setIsActive(true)
         .setRole(adminRole);
 
+    ConversationEntity conversation = new ConversationEntity().setUser(user).setWsTopic("this-topic-name")
+        .setStatus(ConversationStatusEnum.OPEN);
+
     this.userRepository.saveAll(Arrays.asList(user, admin));
+    this.conversationRepository.save(conversation);
   }
 }
