@@ -38,7 +38,6 @@ back-open-tests-coverage: ## Open Jacoco tests coverage results
 	cd back && open back/target/site/jacoco/index.html
 
 front-run: ## run the frontend app
-	export SERVER_ADDRESS="${address}"
 	cd front && npm install && ng serve --host 0.0.0.0
 
 run: ## Run all services
