@@ -30,7 +30,7 @@ public class WsService {
         -----------------------------------------------------------------------------------
               """, headers.toString(), topic, response.toString()));
 
-    this.messagingTemplate.convertAndSend(topic, wsMessage);
+    this.messagingTemplate.convertAndSend("/topic/" + topic, wsMessage);
 
     System.out.println("--------------------------------- MESSAGE SENT ---------------------------------");
   }

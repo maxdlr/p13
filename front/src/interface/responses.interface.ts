@@ -3,6 +3,7 @@ import {
   ConversationInfo,
 } from './conversation.interface';
 import { UserInfo } from './user.interface';
+import { MessageInfo } from './message.interface';
 
 export interface GetUserResponse {
   GetUser: UserInfo;
@@ -30,4 +31,8 @@ export interface GetAllConversationsOfUserResponse {
 
 export interface GetConversationAndMessages {
   GetConversationAndMessages: ConversationAndMessages;
+}
+
+export interface CreateMessageResponse {
+  CreateMessage: MessageInfo;
 }

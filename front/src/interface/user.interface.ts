@@ -1,7 +1,7 @@
 import { RoleInfo } from './role.interface';
 
 export interface UserInfo {
-  id: string;
+  id: number;
   email: string;
   firstname: string;
   lastname: string;

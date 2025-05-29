@@ -3,11 +3,10 @@ import { gql } from 'apollo-angular';
 export const GET_CONVERSATION_AND_MESSAGES = gql`
   query GetConversationAndMessages($conversationId: ID!) {
     GetConversation(id: $conversationId) {
+      id
       wsTopic
       user {
-        email
-        firstname
-        lastname
+        id
       }
       status
     }
@@ -15,33 +14,15 @@ export const GET_CONVERSATION_AND_MESSAGES = gql`
       id
       content
       user {
-        id
-        email
         firstname
         lastname
-        phoneNumber
-        isActive
         role {
-          id
           name
         }
       }
       conversation {
         id
         wsTopic
-        user {
-          id
-          email
-          firstname
-          lastname
-          phoneNumber
-          isActive
-          role {
-            id
-            name
-          }
-        }
-        status
       }
       status
     }

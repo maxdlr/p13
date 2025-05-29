@@ -12,7 +12,7 @@
         @for (message of currentMessages; track message.id) {
           <app-message [message]="message" />
         }
-        <app-input />
+        <app-input [conversation]="currentConversation" />
       </div>
     </div>
   </div>

@@ -8,3 +8,9 @@ export interface MessageInfo {
   conversation: ConversationInfo;
   status: string;
 }
+
+export interface MessageInput {
+  content: string;
+  userId: number;
+  conversationId: number;
+}

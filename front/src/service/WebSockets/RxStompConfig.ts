@@ -57,6 +57,6 @@ export const rxStompConfig: RxStompConfig = {
       color = '#808000';
     }
 
-    LoggerService.custom(msg, { bgColor: color });
+    // LoggerService.custom(msg, { bgColor: color });
   },
 };
