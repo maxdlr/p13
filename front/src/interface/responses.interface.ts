@@ -36,3 +36,9 @@ export interface GetConversationAndMessages {
 export interface CreateMessageResponse {
   CreateMessage: MessageInfo;
 }
+
+export interface FixturesResponse {
+  CreateUser: UserInfo;
+  CreateAdmin: UserInfo;
+  CreateConversation: ConversationInfo;
+}

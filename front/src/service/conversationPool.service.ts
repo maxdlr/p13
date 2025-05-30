@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { MessageInfo } from '../interface/message.interface';
-import { LoggerService } from './logger.service';
 
 export type ConversationPool = Map<number, MessageInfo[]>;
 
@@ -21,8 +20,6 @@ export class ConversationPoolService {
     }
 
     this.activeConversationsSubject.set(id, messages);
-
-    LoggerService.info(this.activeConversationsSubject);
   }
 
   public retrieve(id: number): MessageInfo[] | undefined {

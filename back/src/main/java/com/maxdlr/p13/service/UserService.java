@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.maxdlr.p13.dto.UserRecordInfo;
+import com.maxdlr.p13.dto.UserRecordInput;
 import com.maxdlr.p13.entity.ConversationEntity;
 import com.maxdlr.p13.entity.UserEntity;
 import com.maxdlr.p13.exception.UserConversationNotFoundException;
@@ -48,5 +49,9 @@ public class UserService {
             () -> new UserConversationNotFoundException(("Cannot find user conversation with id: " + conversationId)));
 
     return this.userMapper.toRecordInfo(conversation.getUser());
+  }
+
+  public UserRecordInfo createUser(UserRecordInput user) {
+
   }
 }

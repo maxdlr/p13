@@ -12,7 +12,6 @@ import {
 import { MessageComponent } from '../message/message.component';
 import { InputComponent } from '../input/input.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
-import { LoggerService } from '../../service/logger.service';
 import { CREATE_CONVERSATION } from '../../gql-requests/CreateConversation';
 import { GET_ALL_CONVERSATIONS_OF_USER } from '../../gql-requests/GetAllConversationsOfUser';
 import { GET_CONVERSATION_AND_MESSAGES } from '../../gql-requests/GetConversationAndMessages';
@@ -66,7 +65,6 @@ export class ConversationComponent {
   }
 
   private getAllConversations() {
-    LoggerService.info('getting all conversations of user 1');
     this.apollo
       .query<GetAllConversationsOfUserResponse>({
         query: GET_ALL_CONVERSATIONS_OF_USER,
@@ -105,7 +103,6 @@ export class ConversationComponent {
   }
 
   openNewConversation() {
-    LoggerService.info('Creating new conversation');
     this.apollo
       .mutate<CreateConversationResponse>({
         mutation: CREATE_CONVERSATION,
@@ -129,7 +126,6 @@ export class ConversationComponent {
 
   private subscribeToCurrentConversationMessages() {
     this.messageListTopic$.subscribe((topic: string) => {
-      LoggerService.info('listening to ' + topic);
       this.wsService
         .watch(topic)
         .pipe(takeUntil(this.wsService.destroy$))
@@ -147,7 +143,6 @@ export class ConversationComponent {
   }
 
   private subscribeToConversationList() {
-    LoggerService.info('listening to conversation list');
     this.wsService
       .watch('/topic/all-user-conversations')
       .subscribe((response: IMessage) => {
@@ -160,7 +155,6 @@ export class ConversationComponent {
   }
 
   private unsubscribeFromCurrentConversation() {
-    LoggerService.info('closing current conversation');
     if (this.currentConversation) {
       this.wsService.destroy$.next();
       this.currentConversationSubscription.unsubscribe();

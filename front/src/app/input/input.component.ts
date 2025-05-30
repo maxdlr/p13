@@ -35,7 +35,6 @@ export class InputComponent {
         },
       })
       .subscribe(() => {
-        LoggerService.info('sending');
         this.messageControl.setValue('');
       });
   }

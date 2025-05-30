@@ -9,3 +9,14 @@ export interface UserInfo {
   isActive: boolean;
   role: RoleInfo;
 }
+
+export interface UserInput {
+  id: number;
+  email: string;
+  password: string;
+  firstname: string;
+  lastname: string;
+  phoneNumber: string;
+  isActive: boolean;
+  role: string;
+}
