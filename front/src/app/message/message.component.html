@@ -7,32 +7,32 @@
           'col-start-4 col-end-13 text-end': message.user.role.name === 'USER',
           'col-start-1 col-end-8': message.user.role.name !== 'USER',
         }"
-      >
+        >
         <div
           class="flex flex-row items-center"
           [ngClass]="{ 'justify-end': message.user.role.name === 'USER' }"
-        >
-          <ng-container *ngIf="message.user.role.name !== 'USER'">
+          >
+          @if (message.user.role.name !== 'USER') {
             <div
               class="flex text-white items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0"
-            >
+              >
               {{ initials }}
             </div>
-          </ng-container>
+          }
 
           <div
             class="relative mx-3 text-sm bg-white py-2 px-4 shadow rounded-xl"
-          >
+            >
             <div>{{ message.content }}</div>
           </div>
 
-          <ng-container *ngIf="message.user.role.name === 'USER'">
+          @if (message.user.role.name === 'USER') {
             <div
               class="flex text-white items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0"
-            >
+              >
               {{ initials }}
             </div>
-          </ng-container>
+          }
         </div>
       </div>
     </div>

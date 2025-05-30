@@ -4,11 +4,10 @@ import { BubbleIconComponent } from '../bubble-icon/bubble-icon.component';
 import { SpinnerIconComponent } from '../spinner-icon/spinner-icon.component';
 
 @Component({
-  selector: 'app-sidebar',
-  standalone: true,
-  imports: [BubbleIconComponent, SpinnerIconComponent],
-  templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.sass',
+    selector: 'app-sidebar',
+    imports: [BubbleIconComponent, SpinnerIconComponent],
+    templateUrl: './sidebar.component.html',
+    styleUrl: './sidebar.component.sass'
 })
 export class SidebarComponent {
   @Input() conversations: ConversationInfo[] = [];

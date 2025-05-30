@@ -22,11 +22,10 @@ import { BehaviorSubject, Observable, Subscription, takeUntil } from 'rxjs';
 import { ConversationPoolService } from '../../service/conversationPool.service';
 
 @Component({
-  selector: 'app-conversation',
-  standalone: true,
-  imports: [MessageComponent, InputComponent, SidebarComponent],
-  templateUrl: './conversation.component.html',
-  styleUrl: './conversation.component.sass',
+    selector: 'app-conversation',
+    imports: [MessageComponent, InputComponent, SidebarComponent],
+    templateUrl: './conversation.component.html',
+    styleUrl: './conversation.component.sass'
 })
 export class ConversationComponent {
   public currentConversation!: ConversationInfo;
