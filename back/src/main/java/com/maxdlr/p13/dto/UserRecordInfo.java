@@ -33,7 +33,7 @@ public record UserRecordInfo(
     return isActive;
   }
 
-  public RoleRecordInfo getRoles() {
+  public RoleRecordInfo getRole() {
     return role;
   }
 }

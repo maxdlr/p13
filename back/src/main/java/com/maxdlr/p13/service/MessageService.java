@@ -43,7 +43,7 @@ public class MessageService {
     this.messageMapper = messageMapper;
   }
 
-  @Transactional(readOnly = true)
+  @Transactional
   public MessageRecordInfo push(final MessageRecordInput messageInput, final MessageStatusEnum status) {
     UserEntity user = this.userRepository.findOneById(messageInput.getUserId())
         .orElseThrow(() -> new MessageUserNotFoundException(
@@ -73,19 +73,19 @@ public class MessageService {
     return this.messageMapper.toRecordInfo(messageEntity);
   }
 
-  @Transactional
+  @Transactional(readOnly = true)
   public List<MessageRecordInfo> findAllByUser(Integer userId) {
     return this.messageMapper.toRecordInfo(this.messageRepository.findByUserId(userId));
   }
 
-  @Transactional
+  @Transactional(readOnly = true)
   public MessageRecordInfo findOneById(Integer id) {
     MessageEntity message = this.messageRepository.findOneById(id)
         .orElseThrow(() -> new MessageNotFoundException("Cannot find message with id: " + id));
     return this.messageMapper.toRecordInfo(message);
   }
 
-  @Transactional
+  @Transactional(readOnly = true)
   public List<MessageRecordInfo> findAllByConversation(Integer conversationId) {
     List<MessageEntity> messages = this.messageRepository.findByConversationId(conversationId);
     return this.messageMapper.toRecordInfo(messages);

@@ -1,0 +1,19 @@
+<div class="flex h-screen antialiased text-gray-800">
+  <div class="flex flex-row h-full w-full overflow-x-hidden">
+    <app-sidebar
+      [conversations]="conversations"
+      (selectedConversationId)="openConversation($event)"
+      (newConversation)="openNewConversation()"
+    />
+    <div class="flex flex-col flex-auto h-full p-6">
+      <div
+        class="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 h-full p-4"
+      >
+        @for (message of currentMessages; track message.id) {
+          <app-message [message]="message" />
+        }
+        <app-input [conversation]="currentConversation" />
+      </div>
+    </div>
+  </div>
+</div>

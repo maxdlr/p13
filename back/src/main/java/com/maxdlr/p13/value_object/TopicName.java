@@ -6,13 +6,7 @@ import com.maxdlr.p13.entity.UserEntity;
 
 public class TopicName {
 
-  private String name;
-
-  public TopicName(UserEntity user) {
-    this.name = UUID.randomUUID().toString() + "-" + user.getEmail();
-  }
-
-  public String get() {
-    return this.name;
+  public static String generate(UserEntity user) {
+    return UUID.randomUUID().toString() + "-" + user.getEmail();
   }
 }
