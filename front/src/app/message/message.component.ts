@@ -4,11 +4,10 @@ import { UtilService } from '../../service/Util.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-message',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './message.component.html',
-  styleUrl: './message.component.sass',
+    selector: 'app-message',
+    imports: [CommonModule],
+    templateUrl: './message.component.html',
+    styleUrl: './message.component.sass'
 })
 export class MessageComponent implements OnInit {
   @Input() message!: MessageInfo;

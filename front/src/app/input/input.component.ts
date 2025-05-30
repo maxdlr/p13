@@ -8,11 +8,10 @@ import { ConversationInfo } from '../../interface/conversation.interface';
 import { LoggerService } from '../../service/logger.service';
 
 @Component({
-  selector: 'app-input',
-  standalone: true,
-  imports: [ReactiveFormsModule],
-  templateUrl: './input.component.html',
-  styleUrl: './input.component.sass',
+    selector: 'app-input',
+    imports: [ReactiveFormsModule],
+    templateUrl: './input.component.html',
+    styleUrl: './input.component.sass'
 })
 export class InputComponent {
   public messageControl: FormControl = new FormControl('');
