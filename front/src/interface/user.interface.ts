@@ -11,12 +11,10 @@ export interface UserInfo {
 }
 
 export interface UserInput {
-  id: number;
   email: string;
   password: string;
   firstname: string;
   lastname: string;
   phoneNumber: string;
-  isActive: boolean;
   role: string;
 }

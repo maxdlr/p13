@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.UUID;
 
 import com.maxdlr.p13.dto.RoleRecordInfo;
+import com.maxdlr.p13.dto.RoleRecordInput;
 import com.maxdlr.p13.dto.UserRecordInfo;
+import com.maxdlr.p13.dto.UserRecordInput;
 import com.maxdlr.p13.dto.ConversationRecordInfo;
 import com.maxdlr.p13.dto.MessageRecordInfo;
 import com.maxdlr.p13.dto.MessageRecordInput;
@@ -14,6 +16,7 @@ import com.maxdlr.p13.entity.UserEntity;
 import com.maxdlr.p13.entity.ConversationEntity;
 import com.maxdlr.p13.entity.MessageEntity;
 import com.maxdlr.p13.enums.RoleEnum;
+import com.maxdlr.p13.value_object.EncryptedPassword;
 import com.maxdlr.p13.value_object.TopicName;
 import com.maxdlr.p13.enums.ConversationStatusEnum;
 import com.maxdlr.p13.enums.MessageStatusEnum;
@@ -25,7 +28,7 @@ public class TestUtils {
     return new UserEntity()
         .setId(id)
         .setEmail("max@max.com" + id)
-        .setPassword("password" + id)
+        .setPassword(EncryptedPassword.generate("password" + id))
         .setFirstname("max" + id)
         .setLastname("dlr" + id)
         .setPhoneNumber("0123456789")
@@ -36,7 +39,7 @@ public class TestUtils {
   public static UserEntity makeUserEntity(RoleEntity role) {
     return new UserEntity()
         .setEmail(UUID.randomUUID().toString() + "@max.com")
-        .setPassword("password")
+        .setPassword(EncryptedPassword.generate("password"))
         .setFirstname("max")
         .setLastname("dlr")
         .setPhoneNumber("0123456789")

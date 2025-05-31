@@ -20,17 +20,21 @@ import { WsService } from '../../service/WebSockets/ws.service';
 import { IMessage } from '@stomp/stompjs';
 import { BehaviorSubject, Observable, Subscription, takeUntil } from 'rxjs';
 import { ConversationPoolService } from '../../service/conversationPool.service';
+import { SessionService } from '../../service/session.service';
+import { LoggerService } from '../../service/logger.service';
+import { UserInfo } from '../../interface/user.interface';
 
 @Component({
-    selector: 'app-conversation',
-    imports: [MessageComponent, InputComponent, SidebarComponent],
-    templateUrl: './conversation.component.html',
-    styleUrl: './conversation.component.sass'
+  selector: 'app-conversation',
+  imports: [MessageComponent, InputComponent, SidebarComponent],
+  templateUrl: './conversation.component.html',
+  styleUrl: './conversation.component.sass',
 })
 export class ConversationComponent {
   public currentConversation!: ConversationInfo;
   public currentMessages: MessageInfo[] = [];
   public conversations: ConversationInfo[] = [];
+  public currentUser!: UserInfo;
 
   private currentConversationSubscription!: Subscription;
 
@@ -45,14 +49,22 @@ export class ConversationComponent {
   private wsService: WsService = inject(WsService);
   private conversationPoolService = inject(ConversationPoolService);
   private apollo: Apollo = inject(Apollo);
+  private sessionService: SessionService = inject(SessionService);
 
   ngOnInit(): void {
-    this.getAllConversations();
-    this.subscribeToCurrentConversationMessages();
-    this.subscribeCurrentConversationToPoolState();
+    this.sessionService.loadUserFixtures(() => this.subscribeToSessionUser());
+  }
+
+  private subscribeToSessionUser() {
+    LoggerService.info('Sub session user');
+    this.sessionService.currentUser$.subscribe((user: UserInfo) => {
+      this.currentUser = user;
+      this.getAllConversations();
+    });
   }
 
   private subscribeCurrentConversationToPoolState() {
+    LoggerService.info('Sub to pool state');
     this.currentConversationMessagesSubject
       .asObservable()
       .subscribe((messages: MessageInfo[]) => {
@@ -64,11 +76,12 @@ export class ConversationComponent {
   }
 
   private getAllConversations() {
+    LoggerService.info('getting all convs');
     this.apollo
       .query<GetAllConversationsOfUserResponse>({
         query: GET_ALL_CONVERSATIONS_OF_USER,
         variables: {
-          userId: 1,
+          userId: this.currentUser.id,
         },
       })
       .subscribe(
@@ -77,18 +90,21 @@ export class ConversationComponent {
             result.data?.GetAllConversationsOfUser;
 
           if (!conversations) {
-            throw new Error('Cannt get All conversations');
+            throw new Error('Cannot get All conversations');
           }
 
           this.conversations = conversations;
+
+          if (this.conversations.length !== 0) {
+            this.currentConversation = this.conversations[0];
+          }
           this.subscribeToConversationList();
-          if (this.conversations.length !== 0)
-            this.openConversation(this.conversations[0].id);
         },
       );
   }
 
   openConversation(id: number) {
+    LoggerService.info('opening conv' + id);
     this.unsubscribeFromCurrentConversation();
 
     const storedMessages: MessageInfo[] | undefined =
@@ -102,12 +118,13 @@ export class ConversationComponent {
   }
 
   openNewConversation() {
+    LoggerService.info('creating conv');
     this.apollo
       .mutate<CreateConversationResponse>({
         mutation: CREATE_CONVERSATION,
         variables: {
           conversation: {
-            userId: 1,
+            userId: this.currentUser.id,
           } as ConversationInput,
         },
       })
@@ -124,6 +141,7 @@ export class ConversationComponent {
   }
 
   private subscribeToCurrentConversationMessages() {
+    LoggerService.info('Sub current conv and its messages');
     this.messageListTopic$.subscribe((topic: string) => {
       this.wsService
         .watch(topic)
@@ -137,11 +155,13 @@ export class ConversationComponent {
           const newMessageList = [...this.currentMessages, body.payload];
           this.currentMessages = newMessageList;
           this.currentConversationMessagesSubject.next(newMessageList);
+          this.subscribeCurrentConversationToPoolState();
         });
     });
   }
 
   private subscribeToConversationList() {
+    LoggerService.info('Sub conv list');
     this.wsService
       .watch('/topic/all-user-conversations')
       .subscribe((response: IMessage) => {
@@ -150,10 +170,13 @@ export class ConversationComponent {
         }
         const body = JSON.parse(response.body);
         this.conversations = [...this.conversations, body.payload];
+        this.subscribeToCurrentConversationMessages();
       });
   }
 
   private unsubscribeFromCurrentConversation() {
+    LoggerService.info('unsub from conv ' + this.currentConversation.id);
+
     if (this.currentConversation) {
       this.wsService.destroy$.next();
       this.currentConversationSubscription.unsubscribe();
@@ -161,6 +184,7 @@ export class ConversationComponent {
   }
 
   private fetchMessagesOfConversation(id: number) {
+    LoggerService.info('getting all message of conv');
     this.currentConversationSubscription = this.apollo
       .query<ConversationAndMessages>({
         query: GET_CONVERSATION_AND_MESSAGES,

@@ -31,13 +31,12 @@ type UserInfo {
 }
 
 input UserInput {
-  id: ID!
   email: String!
+  password: String!
   firstname: String!
   lastname: String!
   phoneNumber: String!
-  isActive: Boolean!
-  roleIds: [ID]!
+  role: String!
 }
 
 # -------------------------------------------------

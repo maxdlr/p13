@@ -50,8 +50,4 @@ public class UserService {
 
     return this.userMapper.toRecordInfo(conversation.getUser());
   }
-
-  public UserRecordInfo createUser(UserRecordInput user) {
-
-  }
 }
