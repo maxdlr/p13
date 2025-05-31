@@ -11,8 +11,10 @@ import com.maxdlr.p13.dto.ConversationRecordInput;
 import com.maxdlr.p13.entity.UserEntity;
 import com.maxdlr.p13.entity.ConversationEntity;
 import com.maxdlr.p13.enums.ConversationStatusEnum;
+import com.maxdlr.p13.enums.RoleEnum;
 import com.maxdlr.p13.exception.ConversationNotFoundException;
 import com.maxdlr.p13.exception.ConversationUserNotFoundException;
+import com.maxdlr.p13.exception.UserNotFoundException;
 import com.maxdlr.p13.mapper.ConversationMapper;
 import com.maxdlr.p13.repository.UserRepository;
 import com.maxdlr.p13.value_object.TopicName;
@@ -58,6 +60,13 @@ public class ConversationService {
 
   @Transactional(readOnly = true)
   public List<ConversationRecordInfo> findByUser(Integer userId) {
+    UserEntity user = this.userRepository.findOneById(userId)
+        .orElseThrow(() -> new UserNotFoundException("Cannot find user: " + userId));
+
+    if (user.getRole().getName() == RoleEnum.ADMIN) {
+      return this.conversationMapper.toRecordInfo(this.conversationRepository.findAll());
+    }
+
     List<ConversationEntity> conversations = this.conversationRepository.findAllByUserId(userId);
     return this.conversationMapper.toRecordInfo(conversations);
   }

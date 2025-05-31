@@ -6,6 +6,12 @@
   <div>{{ welcomeMsg }}</div>
   <div class="flex flex-col mt-8">
     <button
+      (click)="switch()"
+      class="flex items-center justify-center hover:bg-gray-100 rounded-xl p-2 my-3"
+    >
+      {{ roleButton }}
+    </button>
+    <button
       (click)="createConversation()"
       class="flex items-center justify-center hover:bg-gray-100 rounded-xl p-2 my-3"
     >
@@ -22,7 +28,7 @@
     <div class="flex flex-col space-y-1 mt-4 -mx-2 h-full overflow-y-auto">
       @if (conversations.length === 0) {
         <div class="flex items-center justify-center">
-          <app-spinner-icon />
+          <app-spinner-icon class="my-3" />
         </div>
       } @else {
         @for (conversation of conversations; track conversation.id) {

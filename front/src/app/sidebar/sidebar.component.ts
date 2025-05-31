@@ -21,8 +21,10 @@ import { SessionService } from '../../service/session.service';
 })
 export class SidebarComponent implements OnInit {
   @Input() conversations: ConversationInfo[] = [];
+  @Input() roleName?: string;
   @Output() selectedConversationId = new EventEmitter<number>();
   @Output() newConversation = new EventEmitter<void>();
+  @Output() switchUserRole = new EventEmitter<void>();
   public welcomeMsg!: string;
   private sessionService: SessionService = inject(SessionService);
 
@@ -38,5 +40,17 @@ export class SidebarComponent implements OnInit {
 
   createConversation() {
     this.newConversation.emit();
+  }
+
+  switch() {
+    this.switchUserRole.emit();
+  }
+
+  get roleButton() {
+    if (!this.roleName) {
+      return 'Loading...';
+    }
+
+    return this.roleName === 'ADMIN' ? 'As User' : 'As Admin';
   }
 }

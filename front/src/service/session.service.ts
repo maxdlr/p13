@@ -1,39 +1,30 @@
 import { inject, Injectable } from '@angular/core';
-import { Observable } from '@apollo/client/utilities';
-import { BehaviorSubject, Subject, Subscription } from 'rxjs';
-import { UserInfo, UserInput } from '../interface/user.interface';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../environments/environments';
-import { LoggerService } from './logger.service';
+import { BehaviorSubject, Subscription } from 'rxjs';
+import { UserInfo } from '../interface/user.interface';
+import { HttpService } from './http.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SessionService {
-  private currentUserSubject: Subject<UserInfo> = new BehaviorSubject<UserInfo>(
-    {} as UserInfo,
-  );
+  public currentUserSubject: BehaviorSubject<UserInfo> =
+    new BehaviorSubject<UserInfo>({} as UserInfo);
   public currentUser$ = this.currentUserSubject.asObservable();
   private userList: Map<number, UserInfo> = new Map<number, UserInfo>();
-  private http: HttpClient = inject(HttpClient);
+  private http: HttpService = inject(HttpService);
 
-  public loadUserFixtures(onLoaded: () => void): Subscription {
-    return this.http
-      .get<UserInfo[]>(environment.apiUrl + 'fixtures/load', {
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      })
-      .subscribe((users: UserInfo[]) => {
-        users.forEach((user: UserInfo) => {
-          this.userList.set(user.id, user);
-        });
-        this.setCurrentUserAsUser();
-        if (onLoaded) {
-          onLoaded();
-        }
+  public loadFixtures(onLoaded?: () => void): Subscription {
+    return this.http.loadFixtures().subscribe((users: UserInfo[]) => {
+      users.forEach((user: UserInfo) => {
+        this.userList.set(user.id, user);
       });
+      this.setCurrentUserAsUser();
+      if (onLoaded) onLoaded();
+    });
+  }
+
+  public get isAdmin() {
+    return this.currentUserSubject.value.role.name === 'ADMIN';
   }
 
   public setCurrentUserAsUser() {

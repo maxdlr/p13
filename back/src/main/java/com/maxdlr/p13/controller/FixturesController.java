@@ -85,11 +85,7 @@ public class FixturesController {
 
       ConversationEntity conversation = this.conversationService
           .openConversation(new ConversationRecordInput(user.getId()));
-      // ConversationRecordInfo newConversation = this.conversationMapper
-      // .toRecordInfo(this.conversationRepository.save(conversation));
       this.conversationRepository.save(conversation);
-      // this.wsService.send(new HashMap<>(), newConversation.wsTopic(),
-      // newConversation);
       return ResponseEntity.ok(createdUserInfos);
     }
 
