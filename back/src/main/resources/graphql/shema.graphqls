@@ -1,15 +1,15 @@
 type Query {
-  GetUser(id: ID): UserInfo!
+  GetUser(id: ID!): UserInfo!
   GetAllUsers: [UserInfo]!
-  GetUserOfConversation(conversationId: ID): UserInfo!
+  GetUserOfConversation(conversationId: ID!): UserInfo!
 
-  GetMessage(id: ID): MessageInfo!
-  GetAllMessagesOfConversation(conversationId: ID): [MessageInfo]!
-  GetAllMessagesOfUser(userId: ID): [MessageInfo]!
+  GetMessage(id: ID!): MessageInfo!
+  GetAllMessagesOfConversation(conversationId: ID!): [MessageInfo]!
+  GetAllMessagesOfUser(userId: ID!): [MessageInfo]!
 
-  GetAllConversationsOfUser(userId: ID): [ConversationInfo]!
+  GetAllConversationsOfUser(userId: ID!): [ConversationInfo]!
   GetAllConversations: [ConversationInfo]!
-  GetConversation(id: ID): ConversationInfo!
+  GetConversation(id: ID!): ConversationInfo!
 }
 
 type Mutation {
@@ -31,13 +31,12 @@ type UserInfo {
 }
 
 input UserInput {
-  id: ID!
   email: String!
+  password: String!
   firstname: String!
   lastname: String!
   phoneNumber: String!
-  isActive: Boolean!
-  roleIds: [ID]!
+  role: String!
 }
 
 # -------------------------------------------------

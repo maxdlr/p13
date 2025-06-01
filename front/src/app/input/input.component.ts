@@ -1,41 +1,34 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Apollo } from 'apollo-angular';
-import { CREATE_MESSAGE } from '../../gql-requests/CreateMessage';
 import { MessageInput } from '../../interface/message.interface';
-import { CreateMessageResponse } from '../../interface/responses.interface';
 import { ConversationInfo } from '../../interface/conversation.interface';
-import { LoggerService } from '../../service/logger.service';
+import { HttpService } from '../../service/http.service';
+import { SessionService } from '../../service/session.service';
 
 @Component({
-    selector: 'app-input',
-    imports: [ReactiveFormsModule],
-    templateUrl: './input.component.html',
-    styleUrl: './input.component.sass'
+  selector: 'app-input',
+  imports: [ReactiveFormsModule],
+  templateUrl: './input.component.html',
+  styleUrl: './input.component.sass',
 })
 export class InputComponent {
   public messageControl: FormControl = new FormControl('');
   @Input() conversation!: ConversationInfo;
+  @Output() messageSent: EventEmitter<void> = new EventEmitter();
 
-  private apollo: Apollo = inject(Apollo);
+  private http: HttpService = inject(HttpService);
+  private sessionService: SessionService = inject(SessionService);
 
   public send() {
     const message: MessageInput = {
       content: this.messageControl.value,
-      userId: this.conversation.user.id,
+      userId: this.sessionService.currentUserSubject.value.id,
       conversationId: this.conversation.id,
     };
 
-    this.apollo
-      .mutate<CreateMessageResponse>({
-        mutation: CREATE_MESSAGE,
-        variables: {
-          message,
-        },
-      })
-      .subscribe(() => {
-        LoggerService.info('sending');
-        this.messageControl.setValue('');
-      });
+    this.http.createMessage(message).subscribe(() => {
+      this.messageControl.setValue('');
+    });
+    this.messageSent.emit();
   }
 }

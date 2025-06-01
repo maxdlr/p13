@@ -20,8 +20,3 @@ export interface ConversationInfo {
 export interface ConversationInput {
   userId: number;
 }
-
-export interface ConversationAndMessages {
-  GetConversation: ConversationInfo;
-  GetAllMessagesOfConversation: MessageInfo[];
-}

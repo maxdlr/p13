@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MessageInfo } from '../../interface/message.interface';
-import { UtilService } from '../../service/Util.service';
+import { UtilService } from '../../service/util.service';
 import { CommonModule } from '@angular/common';
 
 @Component({

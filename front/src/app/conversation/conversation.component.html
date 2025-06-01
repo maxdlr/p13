@@ -4,15 +4,42 @@
       [conversations]="conversations"
       (selectedConversationId)="openConversation($event)"
       (newConversation)="openNewConversation()"
+      (switchUserRole)="switchUserRole()"
     />
-    <div class="flex flex-col flex-auto h-full p-6">
+    <div class="flex flex-col h-full flex-auto">
       <div
-        class="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 h-full p-4"
+        class="flex flex-col flex-1 rounded-2xl bg-gray-100 m-6 mb-0 p-4 overflow-y-auto"
+        style="scroll-behavior: smooth"
       >
-        @for (message of currentMessages; track message.id) {
-          <app-message [message]="message" />
+        <div class="text-center py-2 bg-gray-200 rounded-2xl my-2">
+          @if (isConversationList || !currentUser || !currentConversation) {
+            <div class="flex justify-center items-center">
+              <app-spinner-icon />
+            </div>
+          } @else {
+            <div>
+              {{ currentUser.id }} - {{ currentUser.role.name }} -
+              {{ currentConversation.wsTopic }}
+            </div>
+          }
+        </div>
+        @if (ischatLoading) {
+          <div class="flex justify-center items-center">
+            <app-spinner-icon />
+          </div>
+        } @else {
+          @for (message of currentMessages; track message.id) {
+            <app-message [message]="message" />
+          }
         }
-        <app-input [conversation]="currentConversation" />
+        <div #scrollAnchor></div>
+      </div>
+
+      <div class="flex-shrink-0 p-6 pt-4">
+        <app-input
+          [conversation]="currentConversation"
+          (messageSent)="scrollToBottom()"
+        />
       </div>
     </div>
   </div>

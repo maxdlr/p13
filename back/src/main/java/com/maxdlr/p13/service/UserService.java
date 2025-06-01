@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.maxdlr.p13.dto.UserRecordInfo;
+import com.maxdlr.p13.dto.UserRecordInput;
 import com.maxdlr.p13.entity.ConversationEntity;
 import com.maxdlr.p13.entity.UserEntity;
 import com.maxdlr.p13.exception.UserConversationNotFoundException;

@@ -1,10 +1,12 @@
-import { Component, inject } from '@angular/core';
 import {
-  ConversationAndMessages,
-  ConversationInfo,
-  ConversationInput,
-} from '../../interface/conversation.interface';
-import { Apollo, MutationResult } from 'apollo-angular';
+  Component,
+  ElementRef,
+  inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import { ConversationInfo } from '../../interface/conversation.interface';
 import {
   CreateConversationResponse,
   GetAllConversationsOfUserResponse,
@@ -12,183 +14,256 @@ import {
 import { MessageComponent } from '../message/message.component';
 import { InputComponent } from '../input/input.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
-import { LoggerService } from '../../service/logger.service';
-import { CREATE_CONVERSATION } from '../../gql-requests/CreateConversation';
-import { GET_ALL_CONVERSATIONS_OF_USER } from '../../gql-requests/GetAllConversationsOfUser';
-import { GET_CONVERSATION_AND_MESSAGES } from '../../gql-requests/GetConversationAndMessages';
 import { MessageInfo } from '../../interface/message.interface';
 import { WsService } from '../../service/WebSockets/ws.service';
 import { IMessage } from '@stomp/stompjs';
-import { BehaviorSubject, Observable, Subscription, takeUntil } from 'rxjs';
-import { ConversationPoolService } from '../../service/conversationPool.service';
+import {
+  Subject,
+  Subscription,
+  takeUntil,
+  filter,
+  distinctUntilChanged,
+} from 'rxjs';
+import { SessionService } from '../../service/session.service';
+import { LoggerService } from '../../service/logger.service';
+import { UserInfo } from '../../interface/user.interface';
+import { HttpService } from '../../service/http.service';
+import { MutationResult } from 'apollo-angular';
+import { SpinnerIconComponent } from '../spinner-icon/spinner-icon.component';
 
 @Component({
-    selector: 'app-conversation',
-    imports: [MessageComponent, InputComponent, SidebarComponent],
-    templateUrl: './conversation.component.html',
-    styleUrl: './conversation.component.sass'
+  selector: 'app-conversation',
+  imports: [
+    MessageComponent,
+    InputComponent,
+    SidebarComponent,
+    SpinnerIconComponent,
+  ],
+  templateUrl: './conversation.component.html',
+  styleUrl: './conversation.component.sass',
 })
-export class ConversationComponent {
+export class ConversationComponent implements OnInit, OnDestroy {
   public currentConversation!: ConversationInfo;
   public currentMessages: MessageInfo[] = [];
   public conversations: ConversationInfo[] = [];
+  public currentUser!: UserInfo;
 
-  private currentConversationSubscription!: Subscription;
+  public ischatLoading: boolean = false;
+  public isConversationList: boolean = false;
 
-  private messageListTopic: BehaviorSubject<string> =
-    new BehaviorSubject<string>('');
-  private messageListTopic$: Observable<string> =
-    this.messageListTopic.asObservable();
+  @ViewChild('scrollAnchor') private scrollAnchor!: ElementRef;
 
-  private currentConversationMessagesSubject: BehaviorSubject<MessageInfo[]> =
-    new BehaviorSubject<MessageInfo[]>([]);
-
+  private chatTopic: Subject<string> = new Subject<string>();
   private wsService: WsService = inject(WsService);
-  private conversationPoolService = inject(ConversationPoolService);
-  private apollo: Apollo = inject(Apollo);
+  private sessionService: SessionService = inject(SessionService);
+  private http: HttpService = inject(HttpService);
+  private componentDestroy$: Subject<void> = new Subject<void>();
+  private chatTopicSubscription: Subscription | null = null;
+  private conversationListSubscription: Subscription | null = null;
 
   ngOnInit(): void {
-    this.getAllConversations();
-    this.subscribeToCurrentConversationMessages();
-    this.subscribeCurrentConversationToPoolState();
+    this.ischatLoading = true;
+    this.isConversationList = true;
+    this.sessionService.loadFixtures(() => this.subscribeToSessionUser());
   }
 
-  private subscribeCurrentConversationToPoolState() {
-    this.currentConversationMessagesSubject
-      .asObservable()
-      .subscribe((messages: MessageInfo[]) => {
-        this.conversationPoolService.register(
-          this.currentConversation?.id,
-          messages,
-        );
+  ngOnDestroy(): void {
+    this.cleanup();
+  }
+
+  private cleanup(): void {
+    this.killChatTopicSubscription();
+    this.killConversationListSubscription();
+    this.componentDestroy$.next();
+    this.componentDestroy$.complete();
+  }
+
+  private subscribeToSessionUser(): void {
+    this.sessionService.currentUser$
+      .pipe(
+        filter((user) => !!user),
+        takeUntil(this.componentDestroy$),
+      )
+      .subscribe((user: UserInfo) => {
+        if (this.currentUser && this.currentUser.id === user.id) {
+          return;
+        }
+
+        this.currentUser = user;
+        this.getAllConversations();
+        this.subscribeToChat();
       });
   }
 
-  private getAllConversations() {
-    LoggerService.info('getting all conversations of user 1');
-    this.apollo
-      .query<GetAllConversationsOfUserResponse>({
-        query: GET_ALL_CONVERSATIONS_OF_USER,
-        variables: {
-          userId: 1,
-        },
-      })
-      .subscribe(
-        (result: MutationResult<GetAllConversationsOfUserResponse>) => {
+  private getAllConversations(): void {
+    this.http
+      .getConversationsOfUser(this.currentUser.id)
+      .pipe(takeUntil(this.componentDestroy$))
+      .subscribe({
+        next: (result: MutationResult<GetAllConversationsOfUserResponse>) => {
           const conversations: ConversationInfo[] | undefined =
             result.data?.GetAllConversationsOfUser;
 
           if (!conversations) {
-            throw new Error('Cannt get All conversations');
+            throw new Error('Cannot get All conversations');
           }
 
           this.conversations = conversations;
           this.subscribeToConversationList();
-          if (this.conversations.length !== 0)
-            this.openConversation(this.conversations[0].id);
         },
-      );
-  }
-
-  openConversation(id: number) {
-    this.unsubscribeFromCurrentConversation();
-
-    const storedMessages: MessageInfo[] | undefined =
-      this.conversationPoolService.retrieve(id);
-
-    if (!storedMessages) {
-      this.fetchMessagesOfConversation(id);
-    } else {
-      this.currentMessages = storedMessages;
-    }
-  }
-
-  openNewConversation() {
-    LoggerService.info('Creating new conversation');
-    this.apollo
-      .mutate<CreateConversationResponse>({
-        mutation: CREATE_CONVERSATION,
-        variables: {
-          conversation: {
-            userId: 1,
-          } as ConversationInput,
-        },
+        error: (error) => LoggerService.error(error.message),
       })
-      .subscribe((result: MutationResult<CreateConversationResponse>) => {
-        const conversation: ConversationInfo | undefined =
-          result.data?.CreateConversation;
-
-        if (!conversation) {
-          throw new Error('Cannot create conversation');
+      .add(() => {
+        if (this.conversations.length !== 0) {
+          this.openConversation(this.conversations[0].id);
         }
-
-        this.currentConversation = conversation;
+        this.isConversationList = false;
       });
   }
 
-  private subscribeToCurrentConversationMessages() {
-    this.messageListTopic$.subscribe((topic: string) => {
-      LoggerService.info('listening to ' + topic);
-      this.wsService
-        .watch(topic)
-        .pipe(takeUntil(this.wsService.destroy$))
-        .subscribe((response: IMessage) => {
-          if (!response) {
-            throw new Error('Cannot receive new messages');
+  public openConversation(id: number): void {
+    this.ischatLoading = true;
+    this.isConversationList = true;
+    if (this.currentConversation && this.currentConversation.id !== id) {
+      this.killChatTopicSubscription();
+    }
+    this.fetchMessagesOfConversation(id);
+  }
+
+  public openNewConversation(): void {
+    this.http
+      .createConversation(this.currentUser.id)
+      .pipe(takeUntil(this.componentDestroy$))
+      .subscribe({
+        next: (result: MutationResult<CreateConversationResponse>) => {
+          const conversation: ConversationInfo | undefined =
+            result.data?.CreateConversation;
+
+          if (!conversation) {
+            throw new Error('Cannot create conversation');
           }
 
-          const body = JSON.parse(response.body);
-          const newMessageList = [...this.currentMessages, body.payload];
-          this.currentMessages = newMessageList;
-          this.currentConversationMessagesSubject.next(newMessageList);
-        });
-    });
-  }
-
-  private subscribeToConversationList() {
-    LoggerService.info('listening to conversation list');
-    this.wsService
-      .watch('/topic/all-user-conversations')
-      .subscribe((response: IMessage) => {
-        if (!response) {
-          throw new Error('Cannot receive conversation list');
-        }
-        const body = JSON.parse(response.body);
-        this.conversations = [...this.conversations, body.payload];
+          this.currentConversation = conversation;
+          this.openConversation(conversation.id);
+        },
+        error: (error) => LoggerService.error(error.message),
       });
   }
 
-  private unsubscribeFromCurrentConversation() {
-    LoggerService.info('closing current conversation');
-    if (this.currentConversation) {
-      this.wsService.destroy$.next();
-      this.currentConversationSubscription.unsubscribe();
+  private subscribeToChat(): void {
+    this.chatTopic
+      .pipe(
+        filter((topic) => topic !== ''),
+        distinctUntilChanged(),
+        takeUntil(this.componentDestroy$),
+      )
+      .subscribe((topic: string) => {
+        this.killChatTopicSubscription();
+
+        this.chatTopicSubscription = this.wsService
+          .watch(topic)
+          .pipe(takeUntil(this.componentDestroy$))
+          .subscribe({
+            next: (response: IMessage) => {
+              if (!response) {
+                throw new Error('Cannot receive new messages');
+              }
+
+              const body = JSON.parse(response.body);
+              this.currentMessages = [...this.currentMessages, body.payload];
+              this.scrollToBottom();
+            },
+            error: (error) => {
+              LoggerService.error('Chat topic subscription error: ' + error);
+            },
+          });
+      });
+  }
+
+  private subscribeToConversationList(): void {
+    this.killConversationListSubscription();
+
+    this.conversationListSubscription = this.wsService
+      .watch('/topic/all-user-conversations')
+      .pipe(takeUntil(this.componentDestroy$))
+      .subscribe({
+        next: (response: IMessage) => {
+          if (!response) {
+            throw new Error('Cannot receive conversation list');
+          }
+          const body = JSON.parse(response.body);
+          this.conversations = [...this.conversations, body.payload];
+          this.scrollToBottom();
+        },
+        error: (error) => {
+          LoggerService.error('Conversation list subscription error: ' + error);
+        },
+      });
+  }
+
+  private killChatTopicSubscription(): void {
+    if (this.chatTopicSubscription) {
+      this.chatTopicSubscription.unsubscribe();
+      this.chatTopicSubscription = null;
     }
   }
 
-  private fetchMessagesOfConversation(id: number) {
-    this.currentConversationSubscription = this.apollo
-      .query<ConversationAndMessages>({
-        query: GET_CONVERSATION_AND_MESSAGES,
-        variables: { conversationId: id },
-        fetchPolicy: 'no-cache',
-      })
-      .subscribe((result) => {
-        const messages: MessageInfo[] | undefined =
-          result.data?.GetAllMessagesOfConversation;
-        const conversation: ConversationInfo | undefined =
-          result.data?.GetConversation;
+  private killConversationListSubscription(): void {
+    if (this.conversationListSubscription) {
+      this.conversationListSubscription.unsubscribe();
+      this.conversationListSubscription = null;
+    }
+  }
 
-        if (!conversation) {
-          throw new Error('Cannot get messages of conversation');
-        }
+  private fetchMessagesOfConversation(id: number): void {
+    this.http
+      .getConversationAndMessages(id)
+      .pipe(takeUntil(this.componentDestroy$))
+      .subscribe({
+        next: (result) => {
+          const messages: MessageInfo[] | undefined =
+            result.data?.GetAllMessagesOfConversation;
+          const conversation: ConversationInfo | undefined =
+            result.data?.GetConversation;
 
-        this.currentConversation = conversation;
-        this.currentMessages = messages;
-        this.currentConversationMessagesSubject.next(messages);
-        this.messageListTopic.next(
-          '/topic/' + this.currentConversation?.wsTopic,
-        );
+          if (!conversation) {
+            throw new Error('Cannot get messages of conversation');
+          }
+
+          this.currentConversation = conversation;
+          this.currentMessages = messages || [];
+          this.chatTopic.next('/topic/' + this.currentConversation?.wsTopic);
+          this.isConversationList = false;
+          this.scrollToBottom();
+        },
+        error: (error) => LoggerService.error(error.message),
       });
+  }
+
+  public switchUserRole(): void {
+    this.ischatLoading = true;
+    this.isConversationList = true;
+    this.cleanup();
+    this.componentDestroy$ = new Subject<void>();
+
+    this.conversations = [];
+    this.currentMessages = [];
+    this.currentConversation = undefined as any;
+
+    this.sessionService.isAdmin
+      ? this.sessionService.setCurrentUserAsUser()
+      : this.sessionService.setCurrentUserAsAdmin();
+
+    setTimeout(() => {
+      this.subscribeToSessionUser();
+    }, 100);
+  }
+
+  public scrollToBottom() {
+    setTimeout(() => {
+      this.scrollAnchor?.nativeElement?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+
+    this.ischatLoading = false;
   }
 }
