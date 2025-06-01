@@ -51,7 +51,7 @@ public class MessageController {
 
     this.wsService.<MessageRecordInfo>send(
         headers,
-        createdMessage.getConversation().getWsTopic(),
+        createdMessage.conversation().wsTopic(),
         createdMessage);
 
     return createdMessage;

@@ -41,11 +41,11 @@ public class MessageMapperTests {
     assertNotNull(info);
     assertNotNull(entity);
 
-    assertEquals(info.getId(), entity.getId());
-    assertEquals(info.getUser().getId(), entity.getUser().getId());
-    assertEquals(info.getStatus(), entity.getStatus().toString());
-    assertEquals(info.getContent(), entity.getContent());
-    assertEquals(info.getConversation().getId(), entity.getConversation().getId());
+    assertEquals(info.id(), entity.getId());
+    assertEquals(info.user().id(), entity.getUser().getId());
+    assertEquals(info.status(), entity.getStatus().toString());
+    assertEquals(info.content(), entity.getContent());
+    assertEquals(info.user().id(), entity.getConversation().getId());
   }
 
   @Test
@@ -64,11 +64,11 @@ public class MessageMapperTests {
       assertNotNull(info);
       assertNotNull(entity);
 
-      assertEquals(info.getId(), entity.getId());
-      assertEquals(info.getUser().getId(), entity.getUser().getId());
-      assertEquals(info.getStatus(), entity.getStatus().toString());
-      assertEquals(info.getContent(), entity.getContent());
-      assertEquals(info.getConversation().getId(), entity.getConversation().getId());
+      assertEquals(info.id(), entity.getId());
+      assertEquals(info.user().id(), entity.getUser().getId());
+      assertEquals(info.status(), entity.getStatus().toString());
+      assertEquals(info.content(), entity.getContent());
+      assertEquals(info.user().id(), entity.getConversation().getId());
     }
   }
 
@@ -84,11 +84,11 @@ public class MessageMapperTests {
     assertNotNull(info);
     assertNotNull(entity);
 
-    assertEquals(info.getId(), entity.getId());
-    assertEquals(info.getUser().getId(), entity.getUser().getId());
-    assertEquals(info.getStatus(), entity.getStatus().toString());
-    assertEquals(info.getContent(), entity.getContent());
-    assertEquals(info.getConversation().getId(), entity.getConversation().getId());
+    assertEquals(info.id(), entity.getId());
+    assertEquals(info.user().id(), entity.getUser().getId());
+    assertEquals(info.status(), entity.getStatus().toString());
+    assertEquals(info.content(), entity.getContent());
+    assertEquals(info.user().id(), entity.getConversation().getId());
   }
 
   @Test
@@ -110,11 +110,11 @@ public class MessageMapperTests {
       assertNotNull(info);
       assertNotNull(entity);
 
-      assertEquals(info.getId(), entity.getId());
-      assertEquals(info.getUser().getId(), entity.getUser().getId());
-      assertEquals(info.getStatus(), entity.getStatus().toString());
-      assertEquals(info.getContent(), entity.getContent());
-      assertEquals(info.getConversation().getId(), entity.getConversation().getId());
+      assertEquals(info.id(), entity.getId());
+      assertEquals(info.user().id(), entity.getUser().getId());
+      assertEquals(info.status(), entity.getStatus().toString());
+      assertEquals(info.content(), entity.getContent());
+      assertEquals(info.user().id(), entity.getConversation().getId());
     }
   }
 }

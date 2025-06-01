@@ -41,9 +41,9 @@ public class ConversationService {
 
     UserEntity user = this.userRepository
         .findOneById(conversationInput
-            .getUserId())
+            .userId())
         .orElseThrow(() -> new ConversationUserNotFoundException(
-            "Cannot find conversation user of id : " + conversationInput.getUserId()));
+            "Cannot find conversation user of id : " + conversationInput.userId()));
 
     ConversationEntity conversation = new ConversationEntity()
         .setWsTopic(TopicName.generate(user))

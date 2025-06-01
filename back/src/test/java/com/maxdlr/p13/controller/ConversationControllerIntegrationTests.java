@@ -206,8 +206,8 @@ public class ConversationControllerIntegrationTests {
         .entity(ConversationRecordInfo.class)
         .satisfies(createdConv -> {
           assertNotNull(createdConv);
-          assertEquals(createdConv.getUser().getId(), this.testUser.getId());
-          assertEquals(createdConv.getStatus(),
+          assertEquals(createdConv.user().id(), this.testUser.getId());
+          assertEquals(createdConv.status(),
               ConversationStatusEnum.OPEN.toString());
         });
     ;

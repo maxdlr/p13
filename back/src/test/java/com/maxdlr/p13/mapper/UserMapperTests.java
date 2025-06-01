@@ -37,14 +37,14 @@ public class UserMapperTests {
     assertNotNull(info);
 
     assertNotNull(entity.getId());
-    assertNotNull(info.getId());
+    assertNotNull(info.id());
 
-    assertEquals(entity.getId(), info.getId());
-    assertEquals(entity.getFirstname(), info.getFirstname());
-    assertEquals(entity.getLastname(), info.getLastname());
-    assertEquals(entity.getPhoneNumber(), info.getPhoneNumber());
-    assertEquals(entity.getIsActive(), info.getIsActive());
-    assertEquals(entity.getEmail(), info.getEmail());
+    assertEquals(entity.getId(), info.id());
+    assertEquals(entity.getFirstname(), info.firstname());
+    assertEquals(entity.getLastname(), info.lastname());
+    assertEquals(entity.getPhoneNumber(), info.phoneNumber());
+    assertEquals(entity.getIsActive(), info.isActive());
+    assertEquals(entity.getEmail(), info.email());
   }
 
   @Test
@@ -66,14 +66,14 @@ public class UserMapperTests {
       assertNotNull(info);
 
       assertNotNull(entity.getId());
-      assertNotNull(info.getId());
+      assertNotNull(info.id());
 
-      assertEquals(entity.getId(), info.getId());
-      assertEquals(entity.getFirstname(), info.getFirstname());
-      assertEquals(entity.getLastname(), info.getLastname());
-      assertEquals(entity.getPhoneNumber(), info.getPhoneNumber());
-      assertEquals(entity.getIsActive(), info.getIsActive());
-      assertEquals(entity.getEmail(), info.getEmail());
+      assertEquals(entity.getId(), info.id());
+      assertEquals(entity.getFirstname(), info.firstname());
+      assertEquals(entity.getLastname(), info.lastname());
+      assertEquals(entity.getPhoneNumber(), info.phoneNumber());
+      assertEquals(entity.getIsActive(), info.isActive());
+      assertEquals(entity.getEmail(), info.email());
     }
   }
 
@@ -86,14 +86,14 @@ public class UserMapperTests {
     assertNotNull(info);
 
     assertNotNull(entity.getId());
-    assertNotNull(info.getId());
+    assertNotNull(info.id());
 
-    assertEquals(entity.getId(), info.getId());
-    assertEquals(entity.getFirstname(), info.getFirstname());
-    assertEquals(entity.getLastname(), info.getLastname());
-    assertEquals(entity.getPhoneNumber(), info.getPhoneNumber());
-    assertEquals(entity.getIsActive(), info.getIsActive());
-    assertEquals(entity.getEmail(), info.getEmail());
+    assertEquals(entity.getId(), info.id());
+    assertEquals(entity.getFirstname(), info.firstname());
+    assertEquals(entity.getLastname(), info.lastname());
+    assertEquals(entity.getPhoneNumber(), info.phoneNumber());
+    assertEquals(entity.getIsActive(), info.isActive());
+    assertEquals(entity.getEmail(), info.email());
   }
 
   @Test
@@ -114,14 +114,14 @@ public class UserMapperTests {
       assertNotNull(info);
 
       assertNotNull(entity.getId());
-      assertNotNull(info.getId());
+      assertNotNull(info.id());
 
-      assertEquals(entity.getId(), info.getId());
-      assertEquals(entity.getFirstname(), info.getFirstname());
-      assertEquals(entity.getLastname(), info.getLastname());
-      assertEquals(entity.getPhoneNumber(), info.getPhoneNumber());
-      assertEquals(entity.getIsActive(), info.getIsActive());
-      assertEquals(entity.getEmail(), info.getEmail());
+      assertEquals(entity.getId(), info.id());
+      assertEquals(entity.getFirstname(), info.firstname());
+      assertEquals(entity.getLastname(), info.lastname());
+      assertEquals(entity.getPhoneNumber(), info.phoneNumber());
+      assertEquals(entity.getIsActive(), info.isActive());
+      assertEquals(entity.getEmail(), info.email());
     }
   }
 }
