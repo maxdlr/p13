@@ -72,9 +72,9 @@ public class FixturesController {
           .setRole(userRole);
 
       UserEntity admin = new UserEntity()
-          .setEmail("admin@support.com")
-          .setFirstname("client")
-          .setLastname("support")
+          .setEmail("admin@yourcaryourway.com")
+          .setFirstname("admin")
+          .setLastname("yourcaryourway")
           .setPassword("password")
           .setPhoneNumber("0123456789")
           .setIsActive(true)

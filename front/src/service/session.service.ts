@@ -24,6 +24,10 @@ export class SessionService {
   }
 
   public get isAdmin() {
+    if (!this.currentUserSubject.value || !this.currentUserSubject.value.role) {
+      return false;
+    }
+
     return this.currentUserSubject.value.role.name === 'ADMIN';
   }
 

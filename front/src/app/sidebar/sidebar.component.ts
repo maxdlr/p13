@@ -12,10 +12,11 @@ import { SpinnerIconComponent } from '../spinner-icon/spinner-icon.component';
 import { UserInfo } from '../../interface/user.interface';
 import { UtilService } from '../../service/util.service';
 import { SessionService } from '../../service/session.service';
+import { ButtonComponent } from '../button/button.component';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [BubbleIconComponent, SpinnerIconComponent],
+  imports: [BubbleIconComponent, SpinnerIconComponent, ButtonComponent],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.sass',
 })
@@ -24,6 +25,7 @@ export class SidebarComponent implements OnInit {
   @Output() selectedConversationId = new EventEmitter<number>();
   @Output() newConversation = new EventEmitter<void>();
   @Output() switchUserRole = new EventEmitter<void>();
+
   public welcomeMsg!: string;
   public sessionService: SessionService = inject(SessionService);
 

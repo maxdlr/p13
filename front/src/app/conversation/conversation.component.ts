@@ -29,10 +29,16 @@ import { LoggerService } from '../../service/logger.service';
 import { UserInfo } from '../../interface/user.interface';
 import { HttpService } from '../../service/http.service';
 import { MutationResult } from 'apollo-angular';
+import { SpinnerIconComponent } from '../spinner-icon/spinner-icon.component';
 
 @Component({
   selector: 'app-conversation',
-  imports: [MessageComponent, InputComponent, SidebarComponent],
+  imports: [
+    MessageComponent,
+    InputComponent,
+    SidebarComponent,
+    SpinnerIconComponent,
+  ],
   templateUrl: './conversation.component.html',
   styleUrl: './conversation.component.sass',
 })
@@ -41,6 +47,10 @@ export class ConversationComponent implements OnInit, OnDestroy {
   public currentMessages: MessageInfo[] = [];
   public conversations: ConversationInfo[] = [];
   public currentUser!: UserInfo;
+
+  public ischatLoading: boolean = false;
+  public isConversationList: boolean = false;
+
   @ViewChild('scrollAnchor') private scrollAnchor!: ElementRef;
 
   private chatTopic: Subject<string> = new Subject<string>();
@@ -52,6 +62,8 @@ export class ConversationComponent implements OnInit, OnDestroy {
   private conversationListSubscription: Subscription | null = null;
 
   ngOnInit(): void {
+    this.ischatLoading = true;
+    this.isConversationList = true;
     this.sessionService.loadFixtures(() => this.subscribeToSessionUser());
   }
 
@@ -105,10 +117,13 @@ export class ConversationComponent implements OnInit, OnDestroy {
         if (this.conversations.length !== 0) {
           this.openConversation(this.conversations[0].id);
         }
+        this.isConversationList = false;
       });
   }
 
   public openConversation(id: number): void {
+    this.ischatLoading = true;
+    this.isConversationList = true;
     if (this.currentConversation && this.currentConversation.id !== id) {
       this.killChatTopicSubscription();
     }
@@ -218,6 +233,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
           this.currentConversation = conversation;
           this.currentMessages = messages || [];
           this.chatTopic.next('/topic/' + this.currentConversation?.wsTopic);
+          this.isConversationList = false;
           this.scrollToBottom();
         },
         error: (error) => LoggerService.error(error.message),
@@ -225,6 +241,8 @@ export class ConversationComponent implements OnInit, OnDestroy {
   }
 
   public switchUserRole(): void {
+    this.ischatLoading = true;
+    this.isConversationList = true;
     this.cleanup();
     this.componentDestroy$ = new Subject<void>();
 
@@ -242,9 +260,10 @@ export class ConversationComponent implements OnInit, OnDestroy {
   }
 
   public scrollToBottom() {
-    LoggerService.info('scolling to bottom');
     setTimeout(() => {
       this.scrollAnchor?.nativeElement?.scrollIntoView({ behavior: 'smooth' });
     }, 100);
+
+    this.ischatLoading = false;
   }
 }

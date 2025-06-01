@@ -2,7 +2,6 @@ import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MessageInput } from '../../interface/message.interface';
 import { ConversationInfo } from '../../interface/conversation.interface';
-import { LoggerService } from '../../service/logger.service';
 import { HttpService } from '../../service/http.service';
 import { SessionService } from '../../service/session.service';
 
@@ -27,9 +26,7 @@ export class InputComponent {
       conversationId: this.conversation.id,
     };
 
-    LoggerService.info('sent message : ' + message);
-    this.http.createMessage(message).subscribe((message) => {
-      LoggerService.info('sent message : ' + message.data?.CreateMessage);
+    this.http.createMessage(message).subscribe(() => {
       this.messageControl.setValue('');
     });
     this.messageSent.emit();

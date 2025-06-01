@@ -5,18 +5,18 @@ export const GET_ALL_CONVERSATIONS_OF_USER = gql`
     GetAllConversationsOfUser(userId: $userId) {
       id
       # wsTopic
-      # user {
-      #   id
-      #   email
-      #   firstname
-      #   lastname
-      #   phoneNumber
-      #   isActive
-      #   role {
-      #     id
-      #     name
-      #   }
-      # }
+      user {
+        #   id
+        #   email
+        firstname
+        lastname
+        #   phoneNumber
+        #   isActive
+        #   role {
+        #     id
+        #     name
+        #   }
+      }
       # status
     }
   }
