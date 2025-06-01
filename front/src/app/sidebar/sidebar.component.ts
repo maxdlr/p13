@@ -21,12 +21,11 @@ import { SessionService } from '../../service/session.service';
 })
 export class SidebarComponent implements OnInit {
   @Input() conversations: ConversationInfo[] = [];
-  @Input() roleName?: string;
   @Output() selectedConversationId = new EventEmitter<number>();
   @Output() newConversation = new EventEmitter<void>();
   @Output() switchUserRole = new EventEmitter<void>();
   public welcomeMsg!: string;
-  private sessionService: SessionService = inject(SessionService);
+  public sessionService: SessionService = inject(SessionService);
 
   ngOnInit(): void {
     this.sessionService.currentUser$.subscribe((user: UserInfo) => {
@@ -47,10 +46,10 @@ export class SidebarComponent implements OnInit {
   }
 
   get roleButton() {
-    if (!this.roleName) {
+    if (!this.sessionService.currentUserSubject.value) {
       return 'Loading...';
     }
 
-    return this.roleName === 'ADMIN' ? 'As User' : 'As Admin';
+    return this.sessionService.isAdmin ? 'As User' : 'As Admin';
   }
 }

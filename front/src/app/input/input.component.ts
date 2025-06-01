@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MessageInput } from '../../interface/message.interface';
 import { ConversationInfo } from '../../interface/conversation.interface';
@@ -15,6 +15,7 @@ import { SessionService } from '../../service/session.service';
 export class InputComponent {
   public messageControl: FormControl = new FormControl('');
   @Input() conversation!: ConversationInfo;
+  @Output() messageSent: EventEmitter<void> = new EventEmitter();
 
   private http: HttpService = inject(HttpService);
   private sessionService: SessionService = inject(SessionService);
@@ -31,5 +32,6 @@ export class InputComponent {
       LoggerService.info('sent message : ' + message.data?.CreateMessage);
       this.messageControl.setValue('');
     });
+    this.messageSent.emit();
   }
 }

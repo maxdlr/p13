@@ -11,12 +11,14 @@
     >
       {{ roleButton }}
     </button>
-    <button
-      (click)="createConversation()"
-      class="flex items-center justify-center hover:bg-gray-100 rounded-xl p-2 my-3"
-    >
-      Nouvelle conversation
-    </button>
+    @if (sessionService.isAdmin) {
+      <button
+        (click)="createConversation()"
+        class="flex items-center justify-center hover:bg-gray-100 rounded-xl p-2 my-3"
+      >
+        Nouvelle conversation
+      </button>
+    }
     <div class="flex flex-row items-center justify-between text-xs">
       <span class="font-bold">Vos conversations</span>
       <span

@@ -7,18 +7,25 @@
       (switchUserRole)="switchUserRole()"
       [roleName]="currentUser ? currentUser.role.name : 'Loading...'"
     />
-    <div class="flex flex-col flex-auto h-full p-6">
+    <div class="flex flex-col h-full flex-auto">
+      <!-- Messages container - scrollable -->
       <div
-        class="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 h-full p-4"
+        class="flex flex-col flex-1 rounded-2xl bg-gray-100 m-6 mb-0 p-4 overflow-y-auto"
+        style="scroll-behavior: smooth"
       >
-        <pre>
-  {{ currentUser.id }} - {{ currentUser.role.name }}
-</pre
-        >
+        <pre>{{ currentUser.id }} - {{ currentUser.role.name }}</pre>
         @for (message of currentMessages; track message.id) {
           <app-message [message]="message" />
         }
-        <app-input [conversation]="currentConversation" />
+        <div #scrollAnchor></div>
+      </div>
+
+      <!-- Input container - sticky at bottom -->
+      <div class="flex-shrink-0 p-6 pt-4">
+        <app-input
+          [conversation]="currentConversation"
+          (messageSent)="scrollToBottom()"
+        />
       </div>
     </div>
   </div>

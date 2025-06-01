@@ -14,7 +14,6 @@ import { MessageInput } from '../interface/message.interface';
 import { CREATE_MESSAGE } from '../gql-requests/CreateMessage';
 import { environment } from '../environments/environments';
 import { UserInfo } from '../interface/user.interface';
-import { LoggerService } from './logger.service';
 
 @Injectable({
   providedIn: 'root',
@@ -29,6 +28,7 @@ export class HttpService {
       variables: {
         userId,
       },
+      fetchPolicy: 'no-cache',
     });
   }
 
@@ -40,6 +40,7 @@ export class HttpService {
           userId,
         },
       },
+      fetchPolicy: 'no-cache',
     });
   }
 
@@ -49,6 +50,7 @@ export class HttpService {
       variables: {
         conversationId,
       },
+      fetchPolicy: 'no-cache',
     });
 
     return a;
@@ -60,6 +62,7 @@ export class HttpService {
       variables: {
         message,
       },
+      fetchPolicy: 'no-cache',
     });
   }
 
