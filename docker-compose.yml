@@ -1,0 +1,43 @@
+version: "3.8" # Use a recent Docker Compose version
+
+services:
+  p13:
+    container_name: p13
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4200:80" # Frontend (Angular/Nginx) accessible on host port 4200
+    depends_on:
+      # p13 service depends on mariadb. This ensures mariadb starts first.
+      mariadb:
+        condition: service_healthy # Wait until mariadb is healthy before starting p13
+    environment:
+      # These environment variables will be picked up by Spring Boot
+      # They override application.properties for database connection
+      SPRING_DATASOURCE_URL: jdbc:mariadb://mariadb:3306/mydatabase # Use the service name 'mariadb'
+      SPRING_DATASOURCE_USERNAME: myuser
+      SPRING_DATASOURCE_PASSWORD: secret
+      # Optional: Specify active profiles if you have them, e.g., for prod/dev separation
+      # SPRING_PROFILES_ACTIVE: prod
+
+  mariadb:
+    container_name: p13_mariadb # Give it a distinct container name
+    image: "mariadb:latest"
+    environment:
+      MARIADB_DATABASE: mydatabase
+      MARIADB_PASSWORD: secret
+      MARIADB_ROOT_PASSWORD: verysecret
+      MARIADB_USER: myuser
+    ports:
+      - "3306:3306" # Optional: Map MariaDB port to host if you need to access it directly (e.g., with a GUI tool)
+    volumes:
+      - mariadb_data:/var/lib/mysql # Persist your database data
+    healthcheck: # Define a health check for mariadb
+      test: ["CMD", "mariadb", "-u", "myuser", "-psecret", "-e", "SELECT 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mariadb_data: # Define the named volume for persistent data
