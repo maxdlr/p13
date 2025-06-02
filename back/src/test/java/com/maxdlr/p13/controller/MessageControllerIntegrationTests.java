@@ -292,9 +292,9 @@ public class MessageControllerIntegrationTests {
         .entity(MessageRecordInfo.class)
         .satisfies(createdMessage -> {
           assertNotNull(createdMessage);
-          assertEquals("my test content", createdMessage.getContent());
-          assertEquals(createdMessage.getUser().getId(), this.testUser.getId());
-          assertEquals(createdMessage.getConversation().getId(), this.testConversation.getId());
+          assertEquals("my test content", createdMessage.content());
+          assertEquals(createdMessage.user().id(), this.testUser.getId());
+          assertEquals(createdMessage.conversation().id(), this.testConversation.getId());
         });
   }
 
@@ -451,8 +451,8 @@ public class MessageControllerIntegrationTests {
         .entity(MessageRecordInfo.class)
         .satisfies(createdMessage -> {
           assertNotNull(createdMessage);
-          assertEquals("my test content", createdMessage.getContent());
-          assertEquals(createdMessage.getUser().getId(), this.testUser.getId());
+          assertEquals("my test content", createdMessage.content());
+          assertEquals(createdMessage.user().id(), this.testUser.getId());
         });
   }
 

@@ -6,24 +6,4 @@ public record MessageRecordInfo(
     UserRecordInfo user,
     ConversationRecordInfo conversation,
     String status) {
-
-  public Integer getId() {
-    return id;
-  }
-
-  public String getContent() {
-    return content;
-  }
-
-  public UserRecordInfo getUser() {
-    return user;
-  }
-
-  public ConversationRecordInfo getConversation() {
-    return conversation;
-  }
-
-  public String getStatus() {
-    return status;
-  }
 }

@@ -34,8 +34,8 @@ public class RoleMapperTests {
     assertNotNull(info);
     assertNotNull(entity);
 
-    assertEquals(info.getId(), entity.getId());
-    assertEquals(info.getName(), entity.getName().toString());
+    assertEquals(info.id(), entity.getId());
+    assertEquals(info.name(), entity.getName().toString());
   }
 
   @Test
@@ -55,8 +55,8 @@ public class RoleMapperTests {
       assertNotNull(info);
       assertNotNull(entity);
 
-      assertEquals(info.getId(), entity.getId());
-      assertEquals(info.getName(), entity.getName().toString());
+      assertEquals(info.id(), entity.getId());
+      assertEquals(info.name(), entity.getName().toString());
     }
   }
 
@@ -68,8 +68,8 @@ public class RoleMapperTests {
     assertNotNull(info);
     assertNotNull(entity);
 
-    assertEquals(info.getId(), entity.getId());
-    assertEquals(info.getName(), entity.getName().toString());
+    assertEquals(info.id(), entity.getId());
+    assertEquals(info.name(), entity.getName().toString());
   }
 
   @Test
@@ -90,8 +90,8 @@ public class RoleMapperTests {
       assertNotNull(info);
       assertNotNull(entity);
 
-      assertEquals(info.getId(), entity.getId());
-      assertEquals(info.getName(), entity.getName().toString());
+      assertEquals(info.id(), entity.getId());
+      assertEquals(info.name(), entity.getName().toString());
     }
   }
 }

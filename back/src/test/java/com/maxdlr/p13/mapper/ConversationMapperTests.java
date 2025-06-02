@@ -40,10 +40,10 @@ public class ConversationMapperTests {
     assertNotNull(info);
     assertNotNull(entity);
 
-    assertEquals(info.getId(), entity.getId());
-    assertEquals(info.getUser().getId(), entity.getUser().getId());
-    assertEquals(info.getStatus(), entity.getStatus().toString());
-    assertEquals(info.getWsTopic(), entity.getWsTopic());
+    assertEquals(info.id(), entity.getId());
+    assertEquals(info.user().id(), entity.getUser().getId());
+    assertEquals(info.status(), entity.getStatus().toString());
+    assertEquals(info.wsTopic(), entity.getWsTopic());
   }
 
   @Test
@@ -62,10 +62,10 @@ public class ConversationMapperTests {
       assertNotNull(info);
       assertNotNull(entity);
 
-      assertEquals(info.getId(), entity.getId());
-      assertEquals(info.getUser().getId(), entity.getUser().getId());
-      assertEquals(info.getStatus(), entity.getStatus().toString());
-      assertEquals(info.getWsTopic(), entity.getWsTopic());
+      assertEquals(info.id(), entity.getId());
+      assertEquals(info.user().id(), entity.getUser().getId());
+      assertEquals(info.status(), entity.getStatus().toString());
+      assertEquals(info.wsTopic(), entity.getWsTopic());
     }
   }
 
@@ -80,10 +80,10 @@ public class ConversationMapperTests {
     assertNotNull(info);
     assertNotNull(entity);
 
-    assertEquals(info.getId(), entity.getId());
-    assertEquals(info.getUser().getId(), entity.getUser().getId());
-    assertEquals(info.getStatus(), entity.getStatus().toString());
-    assertEquals(info.getWsTopic(), entity.getWsTopic());
+    assertEquals(info.id(), entity.getId());
+    assertEquals(info.user().id(), entity.getUser().getId());
+    assertEquals(info.status(), entity.getStatus().toString());
+    assertEquals(info.wsTopic(), entity.getWsTopic());
   }
 
   @Test
@@ -104,10 +104,10 @@ public class ConversationMapperTests {
       assertNotNull(info);
       assertNotNull(entity);
 
-      assertEquals(info.getId(), entity.getId());
-      assertEquals(info.getUser().getId(), entity.getUser().getId());
-      assertEquals(info.getStatus(), entity.getStatus().toString());
-      assertEquals(info.getWsTopic(), entity.getWsTopic());
+      assertEquals(info.id(), entity.getId());
+      assertEquals(info.user().id(), entity.getUser().getId());
+      assertEquals(info.status(), entity.getStatus().toString());
+      assertEquals(info.wsTopic(), entity.getWsTopic());
     }
   }
 }

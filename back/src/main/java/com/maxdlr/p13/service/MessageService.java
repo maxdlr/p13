@@ -45,25 +45,25 @@ public class MessageService {
 
   @Transactional
   public MessageRecordInfo push(final MessageRecordInput messageInput, final MessageStatusEnum status) {
-    UserEntity user = this.userRepository.findOneById(messageInput.getUserId())
+    UserEntity user = this.userRepository.findOneById(messageInput.userId())
         .orElseThrow(() -> new MessageUserNotFoundException(
-            "Cannot find message user with id: " + messageInput.getUserId()));
+            "Cannot find message user with id: " + messageInput.userId()));
 
     ConversationEntity conversation = null;
 
-    if (messageInput.getConversationId() == null) {
+    if (messageInput.conversationId() == null) {
       conversation = this.conversationService.openConversation(new ConversationRecordInput(user.getId()));
     } else {
       conversation = this.conversationRepository
-          .findOneById(messageInput.getConversationId())
+          .findOneById(messageInput.conversationId())
           .orElseThrow(() -> new ConversationNotFoundException(
-              "Cannot find message conversation with id: " + messageInput.getConversationId()));
+              "Cannot find message conversation with id: " + messageInput.conversationId()));
     }
 
     conversation = this.conversationRepository.save(conversation);
 
     MessageEntity messageEntity = new MessageEntity()
-        .setContent(messageInput.getContent())
+        .setContent(messageInput.content())
         .setUser(user)
         .setConversation(conversation)
         .setStatus(status);
