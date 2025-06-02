@@ -43,6 +43,9 @@ front-run: ## run the frontend app
 run: ## Run all services
 	make -j2 back-run front-run
 
+deploy: ## Run all services
+	docker compose up --force-recreate --build -d
+
 help: ## This menu
 	@echo "Usage: make [target]"
 	@echo

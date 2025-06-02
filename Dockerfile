@@ -4,7 +4,6 @@ COPY ./front/ /usr/local/app/
 RUN npm install -g @angular/cli && npm install
 RUN ng build --configuration=production
 
-# Debug output
 RUN echo "=== Angular build completed ===" && \
   ls -la /usr/local/app/dist/front/ && \
   echo "=== Checking for index.html ===" && \
@@ -17,31 +16,24 @@ COPY ./back/src /workspace/src
 RUN mvn -B -f pom.xml clean package -DskipTests
 
 FROM eclipse-temurin:23-jre-alpine AS final-app-stage
-# Changed from Windows nanoserver to Alpine Linux for broader compatibility
 
-# Set timezone for Alpine Linux
 ENV TZ=Europe/Paris
 RUN apk add --no-cache tzdata && \
   cp /usr/share/zoneinfo/$TZ /etc/localtime && \
   echo $TZ > /etc/timezone
 
-# Install Nginx using Alpine package manager
 RUN apk add --no-cache nginx && \
   mkdir -p /run/nginx
 
-# Remove ALL default nginx content and copy your config (as you already have)
 RUN rm -rf /etc/nginx/conf.d/default.conf /etc/nginx/sites-enabled/default 2>/dev/null || true
 RUN rm -rf /usr/share/nginx/html/* /usr/share/nginx/html/.* 2>/dev/null || true
 COPY --from=frontend-build /usr/local/app/dist/front/browser/ /usr/share/nginx/html/
 COPY ./front/nginx.conf /etc/nginx/nginx.conf
 
-# Test nginx configuration
 RUN nginx -t
 
-# Copy Spring Boot JAR
 COPY --from=backend-build /workspace/target/*.jar /app/app.jar
 
-# Create startup script with better logging
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
 

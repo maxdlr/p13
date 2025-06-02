@@ -46,9 +46,6 @@ public class ConversationControllerIntegrationTests {
   @Autowired
   ConversationMapper conversationMapper;
 
-  // @Autowired
-  // MessageMapper messageMapper;
-
   @Autowired
   UserMapper userMapper;
 

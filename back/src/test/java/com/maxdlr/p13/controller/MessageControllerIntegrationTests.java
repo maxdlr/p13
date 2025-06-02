@@ -405,7 +405,6 @@ public class MessageControllerIntegrationTests {
     Map<String, String> testMessage = new HashMap<String, String>();
     testMessage.put("content", "my test content");
     testMessage.put("userId", this.testUser.getId().toString());
-    // testMessage.put("conversationId", "caca");
 
     tester.document("""
         mutation CreateMessage($message: MessageInput!) {
