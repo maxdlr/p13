@@ -1,6 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ConversationComponent } from './conversation/conversation.component';
-import { SessionService } from '../service/session.service';
 
 @Component({
   selector: 'app-root',
